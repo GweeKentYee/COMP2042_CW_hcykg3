@@ -3,7 +3,6 @@ package test;
 import java.awt.*;
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.util.Random;
 
 /**
  * Created by filippo on 04/09/16.
@@ -18,8 +17,6 @@ abstract public class Brick  {
     public static final int LEFT_IMPACT = 300;
     public static final int RIGHT_IMPACT = 400;
 
-    private static Random rnd;
-
     private String name;
     private Shape brickShape;
 
@@ -33,7 +30,6 @@ abstract public class Brick  {
 
 
     public Brick(String name, Point pos,Dimension size,Color border,Color inner,int strength){
-        rnd = new Random();
         broken = false;
         this.name = name;
         brickShape = makebrickShape(pos,size);
