@@ -26,6 +26,7 @@ abstract public class Ball {
     private int speedY;
 
     public Ball(Point2D center,int radiusA,int radiusB,Color inner,Color border){
+
         this.center = center;
 
         setUp(new Point2D.Double());
@@ -33,17 +34,12 @@ abstract public class Ball {
         setLeft(new Point2D.Double());
         setRight(new Point2D.Double());
 
-        // up.setLocation(center.getX(),center.getY()-(radiusB / 2));
-        // down.setLocation(center.getX(),center.getY()+(radiusB / 2));
-
-        // left.setLocation(center.getX()-(radiusA /2),center.getY());
-        // right.setLocation(center.getX()+(radiusA /2),center.getY());
-
         ballShape = makeBall(center,radiusA,radiusB);
         this.border = border;
         this.inner  = inner;
         speedX = 0;
         speedY = 0;
+
     }
 
     protected abstract Shape makeBall(Point2D center,int radiusA,int radiusB);
@@ -51,15 +47,35 @@ abstract public class Ball {
     public void move(){
 
         center.setLocation((center.getX() + speedX),(center.getY() + speedY));
-
-        // RectangularShape tmp = (RectangularShape) ballShape;
-        // double w = tmp.getWidth();
-        // double h = tmp.getHeight();
-
-        // tmp.setFrame((center.getX() -(w / 2)),(center.getY() - (h / 2)),w,h);
-        // setPoints(w,h);
-
         makeTempShape();
+
+    }
+
+    public void moveTo(Point p){
+
+        center.setLocation(p);
+        makeTempShape();
+
+    }
+
+    private void makeTempShape(){
+
+        RectangularShape tmp = (RectangularShape) ballShape;
+        double w = tmp.getWidth();
+        double h = tmp.getHeight();
+
+        tmp.setFrame((center.getX() -(w / 2)),(center.getY() - (h / 2)),w,h);
+        setPoints(w,h);
+
+    }
+
+    private void setPoints(double width,double height){
+        
+        getUp().setLocation(center.getX(),center.getY()-(height / 2));
+        getDown().setLocation(center.getX(),center.getY()+(height / 2));
+
+        getLeft().setLocation(center.getX()-(width / 2),center.getY());
+        getRight().setLocation(center.getX()+(width / 2),center.getY());
     }
 
     public void setSpeed(int x,int y){
@@ -67,12 +83,20 @@ abstract public class Ball {
         speedY = y;
     }
 
-    public void setXSpeed(int s){
-        speedX = s;
+    public void setXSpeed(int speed){
+        speedX = speed;
     }
 
-    public void setYSpeed(int s){
-        speedY = s;
+    public void setYSpeed(int speed){
+        speedY = speed;
+    }
+
+    public int getSpeedX(){
+        return speedX;
+    }
+
+    public int getSpeedY(){
+        return speedY;
     }
 
     public void reverseX(){
@@ -97,46 +121,6 @@ abstract public class Ball {
 
     public Shape getballShape(){
         return ballShape;
-    }
-
-    public void moveTo(Point p){
-
-        center.setLocation(p);
-
-        // RectangularShape tmp = (RectangularShape) ballShape;
-        // double w = tmp.getWidth();
-        // double h = tmp.getHeight();
-
-        // tmp.setFrame((center.getX() -(w / 2)),(center.getY() - (h / 2)),w,h);
-
-        makeTempShape();
-    }
-
-    private void makeTempShape(){
-
-        RectangularShape tmp = (RectangularShape) ballShape;
-        double w = tmp.getWidth();
-        double h = tmp.getHeight();
-
-        tmp.setFrame((center.getX() -(w / 2)),(center.getY() - (h / 2)),w,h);
-        setPoints(w,h);
-
-    }
-
-    private void setPoints(double width,double height){
-        up.setLocation(center.getX(),center.getY()-(height / 2));
-        down.setLocation(center.getX(),center.getY()+(height / 2));
-
-        left.setLocation(center.getX()-(width / 2),center.getY());
-        right.setLocation(center.getX()+(width / 2),center.getY());
-    }
-
-    public int getSpeedX(){
-        return speedX;
-    }
-
-    public int getSpeedY(){
-        return speedY;
     }
 
     /**
