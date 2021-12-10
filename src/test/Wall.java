@@ -30,12 +30,12 @@ public class Wall {
     private static final int STEEL = 2;
     private static final int CEMENT = 3;
 
-    private Random rnd;
+    private Random random;
     private Rectangle area;
 
-    Brick[] bricks;
-    Ball ball;
-    Player player;
+    private Brick[] bricks;
+    private Ball ball;
+    private Player player;
 
     private Brick[][] levels;
     private int level;
@@ -45,9 +45,9 @@ public class Wall {
     private int ballCount;
     private boolean ballLost;
 
-    public Wall(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos){
+    public Wall(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPosition){
 
-        this.startPoint = new Point(ballPos);
+        this.startPoint = new Point(ballPosition);
 
         levels = makeLevels(drawArea,brickCount,lineCount,brickDimensionRatio);
         level = 0;
@@ -55,20 +55,22 @@ public class Wall {
         ballCount = 3;
         ballLost = false;
 
-        rnd = new Random();
+        random = new Random();
 
-        makeBall(ballPos);
+        BallFactory ballFactory = new BallFactory();
+        ball = ballFactory.makeBall("RUBBERBALL",ballPosition);
+
         int speedX,speedY;
         do{
-            speedX = rnd.nextInt(5) - 2;
+            speedX = random.nextInt(5) - 2;
         }while(speedX == 0);
         do{
-            speedY = -rnd.nextInt(3);
+            speedY = -random.nextInt(3);
         }while(speedY == 0);
 
-        ball.setSpeed(speedX,speedY);
+        getBall().setSpeed(speedX,speedY);
 
-        player = new Player((Point) ballPos.clone(),150,10, drawArea);
+        setPlayer(new Player((Point) ballPosition.clone(),100,10, drawArea));
 
         area = drawArea;
 
@@ -160,10 +162,6 @@ public class Wall {
         return tmp;
     }
 
-    private void makeBall(Point2D ballPos){
-        ball = new RubberBall(ballPos);
-    }
-
     private Brick[][] makeLevels(Rectangle drawArea,int brickCount,int lineCount,double brickDimensionRatio){
         Brick[][] tmp = new Brick[LEVELS_COUNT][];
         tmp[0] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY);
@@ -179,7 +177,7 @@ public class Wall {
     }
 
     public void findImpacts(){
-        if(player.impact(ball)){
+        if(player.impactBall(ball)){
             ball.reverseY();
         }
         else if(impactWall()){
@@ -201,23 +199,23 @@ public class Wall {
     }
 
     private boolean impactWall(){
-        for(Brick b : bricks){
-            switch(b.findImpact(ball)) {
+        for(Brick brick : bricks){
+            switch(brick.findImpact(ball)) {
                 //Vertical Impact
                 case Brick.UP_IMPACT:
-                    ball.reverseY();
-                    return b.setImpact(ball.down, Brick.Crack.UP);
+                    getBall().reverseY();
+                    return brick.setImpact(getBall().getDown(), Crack.DOWN);
                 case Brick.DOWN_IMPACT:
-                    ball.reverseY();
-                    return b.setImpact(ball.up,Brick.Crack.DOWN);
+                    getBall().reverseY();
+                    return brick.setImpact(getBall().getUp(), Crack.UP);
 
                 //Horizontal Impact
                 case Brick.LEFT_IMPACT:
-                    ball.reverseX();
-                    return b.setImpact(ball.right,Brick.Crack.RIGHT);
+                    getBall().reverseX();
+                    return brick.setImpact(getBall().getRight(), Crack.RIGHT);
                 case Brick.RIGHT_IMPACT:
-                    ball.reverseX();
-                    return b.setImpact(ball.left,Brick.Crack.LEFT);
+                    getBall().reverseX();
+                    return brick.setImpact(getBall().getLeft(), Crack.LEFT);
             }
         }
         return false;
@@ -245,10 +243,10 @@ public class Wall {
         ball.moveTo(startPoint);
         int speedX,speedY;
         do{
-            speedX = rnd.nextInt(5) - 2;
+            speedX = random.nextInt(5) - 2;
         }while(speedX == 0);
         do{
-            speedY = -rnd.nextInt(3);
+            speedY = -random.nextInt(3);
         }while(speedY == 0);
 
         ball.setSpeed(speedX,speedY);
@@ -307,6 +305,42 @@ public class Wall {
                 throw  new IllegalArgumentException(String.format("Unknown Type:%d\n",type));
         }
         return  out;
+    }
+
+    /**
+     * @return Brick[] return the bricks
+     */
+    public Brick[] getBricks() {
+        return bricks;
+    }
+
+    /**
+     * @param bricks the bricks to set
+     */
+    public void setBricks(Brick[] bricks) {
+        this.bricks = bricks;
+    }
+
+    public Ball getBall(){
+        return ball;
+    }
+
+    public void setBall(Ball ball){
+        this.ball = ball;
+    }
+
+    /**
+     * @return Player return the player
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * @param player the player to set
+     */
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
 }
