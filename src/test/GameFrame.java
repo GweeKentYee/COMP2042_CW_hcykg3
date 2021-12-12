@@ -18,14 +18,17 @@
 package test;
 
 import javax.swing.*;
+
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
+import java.io.IOException;
 
-
-public class GameFrame extends JFrame implements WindowFocusListener {
+public class GameFrame extends JFrame{
 
     private static final String DEF_TITLE = "Brick Destroy";
 
@@ -35,6 +38,7 @@ public class GameFrame extends JFrame implements WindowFocusListener {
     private boolean gaming;
 
     public GameFrame(){
+
         super();
 
         gaming = false;
@@ -43,7 +47,7 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
         gameBoard = new GameBoard(this);
 
-        homeMenu = new HomeMenu(this,new Dimension(450,300));
+        homeMenu = new HomeMenu(this,new Dimension(450,400));
 
         this.add(homeMenu,BorderLayout.CENTER);
 
@@ -67,7 +71,18 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         this.setUndecorated(false);
         initialize();
         /*to avoid problems with graphics focus controller is added here*/
-        this.addWindowFocusListener(this);
+        this.addWindowFocusListener(new GameFrameController(this));
+
+    }
+
+    public void enableLeaderBoard(){
+        this.dispose();
+        this.remove(homeMenu);
+        final JFXPanel jfxPanel = new JFXPanel();
+        this.setUndecorated(false);
+        Platform.runLater(() -> {
+            initLeaderboardFX(jfxPanel);
+        });
 
     }
 
@@ -78,24 +93,67 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         this.setLocation(x,y);
     }
 
+    private void initLeaderboardFX(JFXPanel jfxPanel){
 
-    @Override
-    public void windowGainedFocus(WindowEvent windowEvent) {
-        /*
-            the first time the frame loses focus is because
-            it has been disposed to install the GameBoard,
-            so went it regains the focus it's ready to play.
-            of course calling a method such as 'onLostFocus'
-            is useful only if the GameBoard as been displayed
-            at least once
-         */
-        gaming = true;
+        this.add(jfxPanel, BorderLayout.CENTER);   
+
+        try {
+            Parent root = FXMLLoader.load(GameFrame.class.getResource("Leaderboard.fxml"));
+            Scene scene = new Scene(root);
+
+            jfxPanel.setScene(scene);
+            initialize();
+        
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            System.exit(1);
+
+        }
+
     }
 
-    @Override
-    public void windowLostFocus(WindowEvent windowEvent) {
-        if(gaming)
-            gameBoard.onLostFocus();
 
+    /**
+     * @return GameBoard return the gameBoard
+     */
+    public GameBoard getGameBoard() {
+        return gameBoard;
     }
+
+    /**
+     * @param gameBoard the gameBoard to set
+     */
+    public void setGameBoard(GameBoard gameBoard) {
+        this.gameBoard = gameBoard;
+    }
+
+    /**
+     * @return HomeMenu return the homeMenu
+     */
+    public HomeMenu getHomeMenu() {
+        return homeMenu;
+    }
+
+    /**
+     * @param homeMenu the homeMenu to set
+     */
+    public void setHomeMenu(HomeMenu homeMenu) {
+        this.homeMenu = homeMenu;
+    }
+
+    /**
+     * @return boolean return the gaming
+     */
+    public boolean isGaming() {
+        return gaming;
+    }
+
+    /**
+     * @param gaming the gaming to set
+     */
+    public void setGaming(boolean gaming) {
+        this.gaming = gaming;
+    }
+
 }
