@@ -19,20 +19,19 @@ package test;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 
 
-public class HomeMenu extends JComponent implements MouseListener, MouseMotionListener {
+public class HomeMenu extends JComponent {
 
     private static final String GREETINGS = "Welcome to:";
     private static final String GAME_TITLE = "Brick Destroy";
     private static final String CREDITS = "Version 0.1";
     private static final String START_TEXT = "Start";
-    private static final String MENU_TEXT = "Exit";
+    private static final String TRAINING_TEXT = "Training";
+    private static final String EXIT_TEXT = "Exit";
+    private static final String LEADERBOARD_TEXT = "Leaderboard";
 
     private static final Color BG_COLOR = Color.GREEN.darker();
     private static final Color BORDER_COLOR = new Color(200,8,21); //Venetian Red
@@ -44,9 +43,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     private static final float[] DASHES = {12,6};
 
     private Rectangle menuFace;
+    private Rectangle trainingButton;
     private Rectangle startButton;
-    private Rectangle menuButton;
-
+    private Rectangle exitButton;
+    private Rectangle leaderboardButton;
 
     private BasicStroke borderStoke;
     private BasicStroke borderStoke_noDashes;
@@ -59,7 +59,11 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     private GameFrame owner;
 
     private boolean startClicked;
-    private boolean menuClicked;
+    private boolean trainingClicked;
+    private boolean exitClicked;
+    private boolean leaderboardClicked;
+
+    private HomeMenuController homeMenuController;
 
 
     public HomeMenu(GameFrame owner,Dimension area){
@@ -67,19 +71,22 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         this.setFocusable(true);
         this.requestFocusInWindow();
 
-        this.addMouseListener(this);
-        this.addMouseMotionListener(this);
+        homeMenuController = new HomeMenuController(this);
+
+        this.addMouseListener(homeMenuController);
+        this.addMouseMotionListener(homeMenuController);
 
         this.owner = owner;
-
 
 
         menuFace = new Rectangle(new Point(0,0),area);
         this.setPreferredSize(area);
 
-        Dimension btnDim = new Dimension(area.width / 3, area.height / 12);
+        Dimension btnDim = new Dimension((area.width / 3) + 40, area.height / 12);
         startButton = new Rectangle(btnDim);
-        menuButton = new Rectangle(btnDim);
+        trainingButton = new Rectangle(btnDim);
+        exitButton = new Rectangle(btnDim);
+        leaderboardButton = new Rectangle(btnDim);
 
         borderStoke = new BasicStroke(BORDER_SIZE,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,0,DASHES,0);
         borderStoke_noDashes = new BasicStroke(BORDER_SIZE,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND);
@@ -87,9 +94,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         greetingsFont = new Font("Noto Mono",Font.PLAIN,25);
         gameTitleFont = new Font("Noto Mono",Font.BOLD,40);
         creditsFont = new Font("Monospaced",Font.PLAIN,10);
-        buttonFont = new Font("Monospaced",Font.PLAIN,startButton.height-2);
-
-
+        buttonFont = new Font("Monospaced",Font.PLAIN,trainingButton.height-6);
 
     }
 
@@ -184,24 +189,25 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
         FontRenderContext frc = g2d.getFontRenderContext();
 
-        Rectangle2D txtRect = buttonFont.getStringBounds(START_TEXT,frc);
-        Rectangle2D mTxtRect = buttonFont.getStringBounds(MENU_TEXT,frc);
+        Rectangle2D sxtRect = buttonFont.getStringBounds(START_TEXT,frc);
+        Rectangle2D txtRect = buttonFont.getStringBounds(TRAINING_TEXT,frc);
+        Rectangle2D extRect = buttonFont.getStringBounds(EXIT_TEXT,frc);
+        Rectangle2D lxtRect = buttonFont.getStringBounds(LEADERBOARD_TEXT,frc);
 
         g2d.setFont(buttonFont);
 
         int x = (menuFace.width - startButton.width) / 2;
-        int y =(int) ((menuFace.height - startButton.height) * 0.8);
+        int y =(int) ((menuFace.height - startButton.height) * 0.6);
+
+
 
         startButton.setLocation(x,y);
 
-        x = (int)(startButton.getWidth() - txtRect.getWidth()) / 2;
-        y = (int)(startButton.getHeight() - txtRect.getHeight()) / 2;
+        x = (int)(startButton.getWidth() - sxtRect.getWidth()) / 2;
+        y = (int)(startButton.getHeight() - sxtRect.getHeight()) / 2;
 
         x += startButton.x;
         y += startButton.y + (startButton.height * 0.9);
-
-
-
 
         if(startClicked){
             Color tmp = g2d.getColor();
@@ -219,97 +225,288 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         x = startButton.x;
         y = startButton.y;
 
-        y *= 1.2;
+        int space = 40;
 
-        menuButton.setLocation(x,y);
-
-
+        y += space;
 
 
-        x = (int)(menuButton.getWidth() - mTxtRect.getWidth()) / 2;
-        y = (int)(menuButton.getHeight() - mTxtRect.getHeight()) / 2;
 
-        x += menuButton.x;
-        y += menuButton.y + (startButton.height * 0.9);
+        trainingButton.setLocation(x,y);
 
-        if(menuClicked){
+        x = (int)(trainingButton.getWidth() - txtRect.getWidth()) / 2;
+        y = (int)(trainingButton.getHeight() - txtRect.getHeight()) / 2;
+
+        x += trainingButton.x;
+        y += trainingButton.y + (trainingButton.height * 0.9);
+
+        if(trainingClicked){
             Color tmp = g2d.getColor();
-
             g2d.setColor(CLICKED_BUTTON_COLOR);
-            g2d.draw(menuButton);
+            g2d.draw(trainingButton);
             g2d.setColor(CLICKED_TEXT);
-            g2d.drawString(MENU_TEXT,x,y);
+            g2d.drawString(TRAINING_TEXT,x,y);
             g2d.setColor(tmp);
         }
         else{
-            g2d.draw(menuButton);
-            g2d.drawString(MENU_TEXT,x,y);
+            g2d.draw(trainingButton);
+            g2d.drawString(TRAINING_TEXT,x,y);
+        }
+
+        x = startButton.x;
+        y = trainingButton.y;
+
+        y += space;
+
+
+
+        exitButton.setLocation(x,y);
+
+        x = (int)(exitButton.getWidth() - extRect.getWidth()) / 2;
+        y = (int)(exitButton.getHeight() - extRect.getHeight()) / 2;
+
+        x += exitButton.x;
+        y += exitButton.y + (trainingButton.height * 0.9);
+
+        if(exitClicked){
+            Color tmp = g2d.getColor();
+
+            g2d.setColor(CLICKED_BUTTON_COLOR);
+            g2d.draw(exitButton);
+            g2d.setColor(CLICKED_TEXT);
+            g2d.drawString(EXIT_TEXT,x,y);
+            g2d.setColor(tmp);
+        }
+        else{
+            g2d.draw(exitButton);
+            g2d.drawString(EXIT_TEXT,x,y);
+        }
+
+        x = trainingButton.x;
+        y = exitButton.y;
+
+        y+= space;
+
+
+
+        leaderboardButton.setLocation(x,y);
+
+        x = (int)(leaderboardButton.getWidth() - lxtRect.getWidth()) / 2;
+        y = (int)(leaderboardButton.getHeight() - lxtRect.getHeight()) / 2;
+
+        x += leaderboardButton.x;
+        y += leaderboardButton.y + (exitButton.height * 0.9);
+
+        if(leaderboardClicked){
+            Color tmp = g2d.getColor();
+
+            g2d.setColor(CLICKED_BUTTON_COLOR);
+            g2d.draw(leaderboardButton);
+            g2d.setColor(CLICKED_TEXT);
+            g2d.drawString(LEADERBOARD_TEXT,x,y);
+            g2d.setColor(tmp);
+        }
+        else{
+            g2d.draw(leaderboardButton);
+            g2d.drawString(LEADERBOARD_TEXT,x,y);
         }
 
     }
 
-    @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
-        Point p = mouseEvent.getPoint();
-        if(startButton.contains(p)){
-           owner.enableGameBoard();
 
-        }
-        else if(menuButton.contains(p)){
-            System.out.println("Goodbye " + System.getProperty("user.name"));
-            System.exit(0);
-        }
+    /**
+     * @return Rectangle return the menuFace
+     */
+    public Rectangle getMenuFace() {
+        return menuFace;
     }
 
-    @Override
-    public void mousePressed(MouseEvent mouseEvent) {
-        Point p = mouseEvent.getPoint();
-        if(startButton.contains(p)){
-            startClicked = true;
-            repaint(startButton.x,startButton.y,startButton.width+1,startButton.height+1);
-
-        }
-        else if(menuButton.contains(p)){
-            menuClicked = true;
-            repaint(menuButton.x,menuButton.y,menuButton.width+1,menuButton.height+1);
-        }
+    /**
+     * @param menuFace the menuFace to set
+     */
+    public void setMenuFace(Rectangle menuFace) {
+        this.menuFace = menuFace;
     }
 
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-        if(startClicked ){
-            startClicked = false;
-            repaint(startButton.x,startButton.y,startButton.width+1,startButton.height+1);
-        }
-        else if(menuClicked){
-            menuClicked = false;
-            repaint(menuButton.x,menuButton.y,menuButton.width+1,menuButton.height+1);
-        }
+    /**
+     * @return Rectangle return the trainingButton
+     */
+    public Rectangle getTrainingButton() {
+        return trainingButton;
     }
 
-    @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
+    /**
+     * @param trainingButton the trainingButton to set
+     */
+    public void setTrainingButton(Rectangle trainingButton) {
+        this.trainingButton = trainingButton;
     }
 
-    @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
+    /**
+     * @return Rectangle return the exitButton
+     */
+    public Rectangle getExitButton() {
+        return exitButton;
     }
 
-
-    @Override
-    public void mouseDragged(MouseEvent mouseEvent) {
-
+    /**
+     * @param exitButton the exitButton to set
+     */
+    public void setExitButton(Rectangle exitButton) {
+        this.exitButton = exitButton;
     }
 
-    @Override
-    public void mouseMoved(MouseEvent mouseEvent) {
-        Point p = mouseEvent.getPoint();
-        if(startButton.contains(p) || menuButton.contains(p))
-            this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        else
-            this.setCursor(Cursor.getDefaultCursor());
-
+    /**
+     * @return BasicStroke return the borderStoke
+     */
+    public BasicStroke getBorderStoke() {
+        return borderStoke;
     }
+
+    /**
+     * @param borderStoke the borderStoke to set
+     */
+    public void setBorderStoke(BasicStroke borderStoke) {
+        this.borderStoke = borderStoke;
+    }
+
+    /**
+     * @return BasicStroke return the borderStoke_noDashes
+     */
+    public BasicStroke getBorderStoke_noDashes() {
+        return borderStoke_noDashes;
+    }
+
+    /**
+     * @param borderStoke_noDashes the borderStoke_noDashes to set
+     */
+    public void setBorderStoke_noDashes(BasicStroke borderStoke_noDashes) {
+        this.borderStoke_noDashes = borderStoke_noDashes;
+    }
+
+    /**
+     * @return Font return the greetingsFont
+     */
+    public Font getGreetingsFont() {
+        return greetingsFont;
+    }
+
+    /**
+     * @param greetingsFont the greetingsFont to set
+     */
+    public void setGreetingsFont(Font greetingsFont) {
+        this.greetingsFont = greetingsFont;
+    }
+
+    /**
+     * @return Font return the gameTitleFont
+     */
+    public Font getGameTitleFont() {
+        return gameTitleFont;
+    }
+
+    /**
+     * @param gameTitleFont the gameTitleFont to set
+     */
+    public void setGameTitleFont(Font gameTitleFont) {
+        this.gameTitleFont = gameTitleFont;
+    }
+
+    /**
+     * @return Font return the creditsFont
+     */
+    public Font getCreditsFont() {
+        return creditsFont;
+    }
+
+    /**
+     * @param creditsFont the creditsFont to set
+     */
+    public void setCreditsFont(Font creditsFont) {
+        this.creditsFont = creditsFont;
+    }
+
+    /**
+     * @return Font return the buttonFont
+     */
+    public Font getButtonFont() {
+        return buttonFont;
+    }
+
+    /**
+     * @param buttonFont the buttonFont to set
+     */
+    public void setButtonFont(Font buttonFont) {
+        this.buttonFont = buttonFont;
+    }
+
+    /**
+     * @return GameFrame return the owner
+     */
+    public GameFrame getOwner() {
+        return owner;
+    }
+
+    /**
+     * @param owner the owner to set
+     */
+    public void setOwner(GameFrame owner) {
+        this.owner = owner;
+    }
+
+    /**
+     * @return boolean return the trainingClicked
+     */
+    public boolean isTrainingClicked() {
+        return trainingClicked;
+    }
+
+    /**
+     * @param trainingClicked the startClicked to set
+     */
+    public void setStartClicked(boolean trainingClicked) {
+        this.trainingClicked = trainingClicked;
+    }
+
+    /**
+     * @return boolean return the menuClicked
+     */
+    public boolean isExitClicked() {
+        return exitClicked;
+    }
+
+    /**
+     * @param menuClicked the menuClicked to set
+     */
+    public void setExitClicked(boolean exitClicked) {
+        this.exitClicked = exitClicked;
+    }
+
+    /**
+     * @return Rectangle return the leaderboardButton
+     */
+    public Rectangle getLeaderboardButton() {
+        return leaderboardButton;
+    }
+
+    /**
+     * @param leaderboardButton the leaderboardButton to set
+     */
+    public void setLeaderboardButton(Rectangle leaderboardButton) {
+        this.leaderboardButton = leaderboardButton;
+    }
+
+    /**
+     * @return boolean return the leaderboardClicked
+     */
+    public boolean isLeaderboardClicked() {
+        return leaderboardClicked;
+    }
+
+    /**
+     * @param leaderboardClicked the leaderboardClicked to set
+     */
+    public void setLeaderboardClicked(boolean leaderboardClicked) {
+        this.leaderboardClicked = leaderboardClicked;
+    }
+
 }
