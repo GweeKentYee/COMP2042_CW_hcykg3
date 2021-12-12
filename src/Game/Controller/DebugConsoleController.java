@@ -1,6 +1,10 @@
-package Game;
+package Game.Controller;
 
 import javax.swing.*;
+
+import Game.DebugConsole;
+import Game.Model.Ball;
+
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;

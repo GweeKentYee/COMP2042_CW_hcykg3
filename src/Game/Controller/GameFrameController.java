@@ -1,7 +1,9 @@
-package Game;
+package Game.Controller;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+
+import Game.GameFrame;
 
 public class GameFrameController implements WindowFocusListener {
 

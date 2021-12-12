@@ -1,4 +1,4 @@
-package Game;
+package Game.Controller;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import Game.Model.Leaderboard;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

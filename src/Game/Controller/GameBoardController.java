@@ -1,7 +1,9 @@
-package Game;
+package Game.Controller;
 
 import java.awt.*;
 import java.awt.event.*;
+
+import Game.GameBoard;
 
 public class GameBoardController implements KeyListener,MouseListener,MouseMotionListener {
 
