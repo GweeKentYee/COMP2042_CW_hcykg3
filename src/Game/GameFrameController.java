@@ -1,4 +1,4 @@
-package test;
+package Game;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;

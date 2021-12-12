@@ -1,4 +1,4 @@
-package test;
+package Game;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -18,9 +18,11 @@ public class HomeMenuController implements MouseListener, MouseMotionListener {
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();
-        if(homeMenu.getTrainingButton().contains(p)){
-           homeMenu.getOwner().enableGameBoard();
-
+        if(homeMenu.getStartButton().contains(p)){
+            homeMenu.getOwner().enableGameBoard("ranked");
+         }
+        else if(homeMenu.getTrainingButton().contains(p)){
+           homeMenu.getOwner().enableGameBoard("training");
         }
         else if(homeMenu.getExitButton().contains(p)){
             System.out.println("Goodbye " + System.getProperty("user.name"));
@@ -34,8 +36,13 @@ public class HomeMenuController implements MouseListener, MouseMotionListener {
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();
-        if(homeMenu.getTrainingButton().contains(p)){
+        if(homeMenu.getStartButton().contains(p)){
             homeMenu.setStartClicked(true);
+            homeMenu.repaint(homeMenu.getStartButton().x,homeMenu.getStartButton().y,homeMenu.getStartButton().width+1,homeMenu.getStartButton(). height + 1);
+
+        }
+        else if(homeMenu.getTrainingButton().contains(p)){
+            homeMenu.setTrainingClicked(true);
             homeMenu.repaint(homeMenu.getTrainingButton().x,homeMenu.getTrainingButton().y,homeMenu.getTrainingButton().width+1,homeMenu.getTrainingButton(). height + 1);
 
         }
@@ -51,8 +58,13 @@ public class HomeMenuController implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
-        if(homeMenu.isTrainingClicked()){
+        if(homeMenu.isStartClicked()){
             homeMenu.setStartClicked(false);
+            homeMenu.repaint(homeMenu.getStartButton().x,homeMenu.getStartButton().y,homeMenu.getStartButton().width+1,homeMenu.getStartButton().height+1);
+             homeMenu.setCursor(Cursor.getDefaultCursor());
+        }
+        else if(homeMenu.isTrainingClicked()){
+            homeMenu.setTrainingClicked(false);
             homeMenu.repaint(homeMenu.getTrainingButton().x,homeMenu.getTrainingButton().y,homeMenu.getTrainingButton().width+1,homeMenu.getTrainingButton().height+1);
              homeMenu.setCursor(Cursor.getDefaultCursor());
         }
@@ -87,7 +99,7 @@ public class HomeMenuController implements MouseListener, MouseMotionListener {
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();
-        if(homeMenu.getTrainingButton().contains(p) || homeMenu.getExitButton().contains(p) || homeMenu.getLeaderboardButton().contains(p))
+        if(homeMenu.getStartButton().contains(p) || homeMenu.getTrainingButton().contains(p) || homeMenu.getExitButton().contains(p) || homeMenu.getLeaderboardButton().contains(p))
             homeMenu.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         else
             homeMenu.setCursor(Cursor.getDefaultCursor());

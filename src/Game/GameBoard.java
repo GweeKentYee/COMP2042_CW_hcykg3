@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package test;
+package Game;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +35,8 @@ public class GameBoard extends JComponent{
     private static final int DEF_HEIGHT = 450;
 
     private static final Color BG_COLOR = Color.WHITE;
+
+    private String mode;
 
     private Timer gameTimer;
 
@@ -56,20 +58,19 @@ public class GameBoard extends JComponent{
     private GameBoardController gameBoardController;
 
 
-    public GameBoard(JFrame owner){
+    public GameBoard(JFrame owner, String mode){
         super();
-
         strLen = 0;
         showPauseMenu = false;
 
-
+        this.mode = mode;
 
         menuFont = new Font("Monospaced",Font.PLAIN,TEXT_SIZE);
 
 
         this.initialize();
         message = "";
-        wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),30,3,6/2,new Point(300,430));
+        wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),6/2,new Point(300,430));
 
         debugConsole = new DebugConsole(owner,wall,this);
         //initialize the first level
@@ -260,6 +261,12 @@ public class GameBoard extends JComponent{
         g2d.setColor(tmpColor);
     }
 
+    
+    public void onLostFocus() {
+        gameTimer.stop();
+        message = "Focus Lost";
+        repaint();
+    }
 
     /**
      * @return Timer return the gameTimer
@@ -401,10 +408,19 @@ public class GameBoard extends JComponent{
         this.debugConsole = debugConsole;
     }
 
-    public void onLostFocus() {
-        gameTimer.stop();
-        message = "Focus Lost";
-        repaint();
+
+    /**
+     * @return String return the mode
+     */
+    public String getMode() {
+        return mode;
+    }
+
+    /**
+     * @param mode the mode to set
+     */
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 
 }

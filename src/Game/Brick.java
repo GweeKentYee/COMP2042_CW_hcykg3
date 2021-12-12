@@ -1,4 +1,4 @@
-package test;
+package Game;
 
 import java.awt.*;
 import java.awt.Point;
@@ -84,6 +84,9 @@ abstract public class Brick  {
     public void impact(){
         strength--;
         broken = (strength == 0);
+        if (broken == true){
+            Wall.setScore(Wall.getScore() + 1);
+        }
     }
 
     private Shape makebrickShape(Point pos,Dimension size){

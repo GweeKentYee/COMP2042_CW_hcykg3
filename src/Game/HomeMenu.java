@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package test;
+package Game;
 
 import javax.swing.*;
 import java.awt.*;
@@ -328,34 +328,6 @@ public class HomeMenu extends JComponent {
     }
 
     /**
-     * @return Rectangle return the trainingButton
-     */
-    public Rectangle getTrainingButton() {
-        return trainingButton;
-    }
-
-    /**
-     * @param trainingButton the trainingButton to set
-     */
-    public void setTrainingButton(Rectangle trainingButton) {
-        this.trainingButton = trainingButton;
-    }
-
-    /**
-     * @return Rectangle return the exitButton
-     */
-    public Rectangle getExitButton() {
-        return exitButton;
-    }
-
-    /**
-     * @param exitButton the exitButton to set
-     */
-    public void setExitButton(Rectangle exitButton) {
-        this.exitButton = exitButton;
-    }
-
-    /**
      * @return BasicStroke return the borderStoke
      */
     public BasicStroke getBorderStoke() {
@@ -454,6 +426,48 @@ public class HomeMenu extends JComponent {
     }
 
     /**
+     * @return Rectangle return the startButton
+     */
+    public Rectangle getStartButton() {
+        return startButton;
+    }
+
+    /**
+     * @param startButton the startButton to set
+     */
+    public void setStartButton(Rectangle startButton) {
+        this.startButton = startButton;
+    }
+
+    /**
+     * @return boolean return the startClicked
+     */
+    public boolean isStartClicked() {
+        return startClicked;
+    }
+
+    /**
+     * @param startClicked the startClicked to set
+     */
+    public void setStartClicked(boolean startClicked) {
+        this.startClicked = startClicked;
+    }
+
+    /**
+     * @return Rectangle return the trainingButton
+     */
+    public Rectangle getTrainingButton() {
+        return trainingButton;
+    }
+
+    /**
+     * @param trainingButton the trainingButton to set
+     */
+    public void setTrainingButton(Rectangle trainingButton) {
+        this.trainingButton = trainingButton;
+    }
+
+    /**
      * @return boolean return the trainingClicked
      */
     public boolean isTrainingClicked() {
@@ -461,10 +475,24 @@ public class HomeMenu extends JComponent {
     }
 
     /**
-     * @param trainingClicked the startClicked to set
+     * @param trainingClicked the trainingClicked to set
      */
-    public void setStartClicked(boolean trainingClicked) {
+    public void setTrainingClicked(boolean trainingClicked) {
         this.trainingClicked = trainingClicked;
+    }
+
+    /**
+     * @return Rectangle return the exitButton
+     */
+    public Rectangle getExitButton() {
+        return exitButton;
+    }
+
+    /**
+     * @param exitButton the exitButton to set
+     */
+    public void setExitButton(Rectangle exitButton) {
+        this.exitButton = exitButton;
     }
 
     /**

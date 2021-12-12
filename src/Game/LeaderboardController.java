@@ -1,4 +1,4 @@
-package test;
+package Game;
 
 import java.io.IOException;
 import java.text.ParseException;

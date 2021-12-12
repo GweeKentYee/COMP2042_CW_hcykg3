@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package test;
+package Game;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -24,7 +24,7 @@ import java.util.Random;
 
 public class Wall {
 
-    private static final int LEVELS_COUNT = 4;
+    private static final int LEVELS_COUNT = 5;
 
     private static final String CLAY = "Clay Brick";
     private static final String STEEL = "Steel Brick";
@@ -45,11 +45,13 @@ public class Wall {
     private int ballCount;
     private boolean ballLost;
 
-    public Wall(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPosition){
+    private static int score = 0;
+
+    public Wall(Rectangle drawArea, double brickDimensionRatio, Point ballPosition){
 
         this.startPoint = new Point(ballPosition);
 
-        levels = makeLevels(drawArea,brickCount,lineCount,brickDimensionRatio);
+        levels = makeLevels(drawArea,brickDimensionRatio);
         level = 0;
 
         ballCount = 3;
@@ -74,105 +76,21 @@ public class Wall {
 
         area = drawArea;
 
-
     }
 
-    private Brick[] makeSingleTypeLevel(Rectangle drawArea, int brickCnt, int lineCnt, double brickSizeRatio, String brickType){
-        /*
-          if brickCount is not divisible by line count,brickCount is adjusted to the biggest
-          multiple of lineCount smaller then brickCount
-         */
-        brickCnt -= brickCnt % lineCnt;
-
-        int brickOnLine = brickCnt / lineCnt;
-
-        double brickLen = drawArea.getWidth() / brickOnLine;
-        double brickHgt = brickLen / brickSizeRatio;
-
-        brickCnt += lineCnt / 2;
-
-        Brick[] tmp  = new Brick[brickCnt];
-
-        Dimension brickSize = new Dimension((int) brickLen,(int) brickHgt);
-        Point p = new Point();
-
-        BrickFactory brickFactory = new BrickFactory();
-
-        int i;
-        for(i = 0; i < tmp.length; i++){
-            int line = i / brickOnLine;
-            if(line == lineCnt)
-                break;
-            double x = (i % brickOnLine) * brickLen;
-            x =(line % 2 == 0) ? x : (x - (brickLen / 2));
-            double y = (line) * brickHgt;
-            p.setLocation(x,y);
-            tmp[i] = brickFactory.makeBrick(brickType, p, brickSize);
-        }
-
-        for(double y = brickHgt;i < tmp.length;i++, y += 2*brickHgt){
-            double x = (brickOnLine * brickLen) - (brickLen / 2);
-            p.setLocation(x,y);
-            tmp[i] = new ClayBrick(p,brickSize);
-        }
-        return tmp;
-
-    }
-
-    private Brick[] makeChessboardLevel(Rectangle drawArea, int brickCnt, int lineCnt, double brickSizeRatio, String typeA, String typeB){
-        /*
-          if brickCount is not divisible by line count,brickCount is adjusted to the biggest
-          multiple of lineCount smaller then brickCount
-         */
-        brickCnt -= brickCnt % lineCnt;
-
-        int brickOnLine = brickCnt / lineCnt;
-
-        int centerLeft = brickOnLine / 2 - 1;
-        int centerRight = brickOnLine / 2 + 1;
-
-        double brickLen = drawArea.getWidth() / brickOnLine;
-        double brickHgt = brickLen / brickSizeRatio;
-
-        brickCnt += lineCnt / 2;
-
-        Brick[] tmp  = new Brick[brickCnt];
-
-        Dimension brickSize = new Dimension((int) brickLen,(int) brickHgt);
-        Point p = new Point();
-
-        BrickFactory brickFactory = new BrickFactory();
-
-        int i;
-        for(i = 0; i < tmp.length; i++){
-            int line = i / brickOnLine;
-            if(line == lineCnt)
-                break;
-            int posX = i % brickOnLine;
-            double x = posX * brickLen;
-            x =(line % 2 == 0) ? x : (x - (brickLen / 2));
-            double y = (line) * brickHgt;
-            p.setLocation(x,y);
-
-            boolean b = ((line % 2 == 0 && i % 2 == 0) || (line % 2 != 0 && posX > centerLeft && posX <= centerRight));
-            tmp[i] = b ?  brickFactory.makeBrick(typeA, p, brickSize) : brickFactory.makeBrick(typeB, p, brickSize);
-        }
-
-        for(double y = brickHgt;i < tmp.length;i++, y += 2*brickHgt){
-            double x = (brickOnLine * brickLen) - (brickLen / 2);
-            p.setLocation(x,y);
-            tmp[i] = brickFactory.makeBrick(typeA, p, brickSize);
-        }
-        return tmp;
-    }
-
-    private Brick[][] makeLevels(Rectangle drawArea,int brickCount,int lineCount,double brickDimensionRatio){
+    private Brick[][] makeLevels(Rectangle drawArea,double brickDimensionRatio){
         Brick[][] tmp = new Brick[LEVELS_COUNT][];
-        tmp[0] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY);
-        tmp[1] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,CEMENT);
-        tmp[2] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,STEEL);
-        tmp[3] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL,CEMENT);
+        tmp[0] = Level.makeSingleTypeLevel(drawArea,30,3,brickDimensionRatio,CLAY);
+        tmp[1] = Level.makeChessboardLevel(drawArea,30,3,brickDimensionRatio,CLAY,CEMENT);
+        tmp[2] = Level.makeChessboardLevel(drawArea,30,3,brickDimensionRatio,CLAY,STEEL);
+        tmp[3] = Level.makeChessboardLevel(drawArea,40,4,brickDimensionRatio,STEEL,CEMENT);
+        tmp[4] = Level.makeSingleTypeLevel(drawArea,40,4,brickDimensionRatio,CEMENT);
         return tmp;
+    }
+
+    public void nextLevel(){
+        bricks = levels[level++];
+        this.brickCount = bricks.length;
     }
 
     public void move(){
@@ -272,11 +190,6 @@ public class Wall {
         return brickCount == 0;
     }
 
-    public void nextLevel(){
-        bricks = levels[level++];
-        this.brickCount = bricks.length;
-    }
-
     public boolean hasLevel(){
         return level < levels.length;
     }
@@ -327,6 +240,20 @@ public class Wall {
      */
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    /**
+     * @return int return the score
+     */
+    public static int getScore() {
+        return score;
+    }
+
+    /**
+     * @param score the score to set
+     */
+    public static void setScore(int score) {
+        Wall.score = score;
     }
 
 }

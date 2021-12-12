@@ -1,4 +1,4 @@
-package test;
+package Game;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -48,8 +48,10 @@ public class GameBoardController implements KeyListener,MouseListener,MouseMotio
                         gameBoard.getGameTimer().start();
                 break;
             case KeyEvent.VK_F1:
-                if(keyEvent.isAltDown() && keyEvent.isShiftDown())
-                    gameBoard.getDebugConsole().setVisible(true);
+                if (gameBoard.getMode() == "training"){
+                    if(keyEvent.isAltDown() && keyEvent.isShiftDown())
+                        gameBoard.getDebugConsole().setVisible(true);
+                }
             default:
                 gameBoard.getWall().getPlayer().stop();
         }

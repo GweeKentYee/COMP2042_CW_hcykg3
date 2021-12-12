@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package test;
+package Game;
 
 import javax.swing.*;
 
@@ -45,8 +45,6 @@ public class GameFrame extends JFrame{
 
         this.setLayout(new BorderLayout());
 
-        gameBoard = new GameBoard(this);
-
         homeMenu = new HomeMenu(this,new Dimension(450,400));
 
         this.add(homeMenu,BorderLayout.CENTER);
@@ -64,9 +62,10 @@ public class GameFrame extends JFrame{
         this.setVisible(true);
     }
 
-    public void enableGameBoard(){
+    public void enableGameBoard(String mode){
         this.dispose();
         this.remove(homeMenu);
+        gameBoard = new GameBoard(this,mode);
         this.add(gameBoard,BorderLayout.CENTER);
         this.setUndecorated(false);
         initialize();
