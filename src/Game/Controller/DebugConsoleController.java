@@ -2,8 +2,8 @@ package Game.Controller;
 
 import javax.swing.*;
 
-import Game.DebugConsole;
 import Game.Model.Ball;
+import Game.View.DebugConsole;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;

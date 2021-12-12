@@ -3,7 +3,7 @@ package Game.Controller;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
-import Game.GameFrame;
+import Game.View.GameFrame;
 
 public class GameFrameController implements WindowFocusListener {
 
