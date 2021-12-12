@@ -19,6 +19,8 @@ package Game;
 
 import java.awt.*;
 
+import Game.View.GameFrame;
+
 public class GraphicsMain {
 
     public static void main(String[] args){
