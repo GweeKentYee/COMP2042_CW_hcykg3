@@ -22,7 +22,7 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-public class DebugConsole extends JDialog implements WindowListener{
+public class DebugConsole extends JDialog {
 
     private static final String TITLE = "Debug Console";
 
@@ -31,7 +31,6 @@ public class DebugConsole extends JDialog implements WindowListener{
     private DebugPanel debugPanel;
     private GameBoard gameBoard;
     private Wall wall;
-
 
     public DebugConsole(JFrame owner,Wall wall,GameBoard gameBoard){
 
@@ -52,52 +51,66 @@ public class DebugConsole extends JDialog implements WindowListener{
         this.setTitle(TITLE);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setLayout(new BorderLayout());
-        this.addWindowListener(this);
+
+        this.addWindowListener(new DebugConsoleController(this));
         this.setFocusable(true);
     }
 
 
-    private void setLocation(){
-        int x = ((owner.getWidth() - this.getWidth()) / 2) + owner.getX();
-        int y = ((owner.getHeight() - this.getHeight()) / 2) + owner.getY();
-        this.setLocation(x,y);
+    /**
+     * @return JFrame return the owner
+     */
+    public JFrame getOwner() {
+        return owner;
     }
 
-
-    @Override
-    public void windowOpened(WindowEvent windowEvent) {
-
+    /**
+     * @param owner the owner to set
+     */
+    public void setOwner(JFrame owner) {
+        this.owner = owner;
     }
 
-    @Override
-    public void windowClosing(WindowEvent windowEvent) {
-        gameBoard.repaint();
+    /**
+     * @return DebugPanel return the debugPanel
+     */
+    public DebugPanel getDebugPanel() {
+        return debugPanel;
     }
 
-    @Override
-    public void windowClosed(WindowEvent windowEvent) {
-
+    /**
+     * @param debugPanel the debugPanel to set
+     */
+    public void setDebugPanel(DebugPanel debugPanel) {
+        this.debugPanel = debugPanel;
     }
 
-    @Override
-    public void windowIconified(WindowEvent windowEvent) {
-
+    /**
+     * @return GameBoard return the gameBoard
+     */
+    public GameBoard getGameBoard() {
+        return gameBoard;
     }
 
-    @Override
-    public void windowDeiconified(WindowEvent windowEvent) {
-
+    /**
+     * @param gameBoard the gameBoard to set
+     */
+    public void setGameBoard(GameBoard gameBoard) {
+        this.gameBoard = gameBoard;
     }
 
-    @Override
-    public void windowActivated(WindowEvent windowEvent) {
-        setLocation();
-        Ball b = wall.getBall();
-        debugPanel.setValues(b.getSpeedX(),b.getSpeedY());
+    /**
+     * @return Wall return the wall
+     */
+    public Wall getWall() {
+        return wall;
     }
 
-    @Override
-    public void windowDeactivated(WindowEvent windowEvent) {
-
+    /**
+     * @param wall the wall to set
+     */
+    public void setWall(Wall wall) {
+        this.wall = wall;
     }
+
 }
