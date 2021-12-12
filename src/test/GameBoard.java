@@ -19,12 +19,9 @@ package test;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.font.FontRenderContext;
 
-
-
-public class GameBoard extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
+public class GameBoard extends JComponent{
 
     private static final String CONTINUE = "Continue";
     private static final String RESTART = "Restart";
@@ -55,6 +52,8 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     private int strLen;
 
     private DebugConsole debugConsole;
+
+    private GameBoardController gameBoardController;
 
 
     public GameBoard(JFrame owner){
@@ -107,17 +106,15 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     }
 
-
-
     private void initialize(){
         this.setPreferredSize(new Dimension(DEF_WIDTH,DEF_HEIGHT));
         this.setFocusable(true);
         this.requestFocusInWindow();
-        this.addKeyListener(this);
-        this.addMouseListener(this);
-        this.addMouseMotionListener(this);
+        gameBoardController = new GameBoardController(this);
+        this.addKeyListener(gameBoardController);
+        this.addMouseListener(gameBoardController);
+        this.addMouseMotionListener(gameBoardController);
     }
-
 
     public void paint(Graphics g){
 
@@ -263,106 +260,148 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         g2d.setColor(tmpColor);
     }
 
-    @Override
-    public void keyTyped(KeyEvent keyEvent) {
+
+    /**
+     * @return Timer return the gameTimer
+     */
+    public Timer getGameTimer() {
+        return gameTimer;
     }
 
-    @Override
-    public void keyPressed(KeyEvent keyEvent) {
-        switch(keyEvent.getKeyCode()){
-            case KeyEvent.VK_A:
-                wall.getPlayer().moveLeft();
-                break;
-            case KeyEvent.VK_D:
-                wall.getPlayer().movRight();
-                break;
-            case KeyEvent.VK_ESCAPE:
-                showPauseMenu = !showPauseMenu;
-                repaint();
-                gameTimer.stop();
-                break;
-            case KeyEvent.VK_SPACE:
-                if(!showPauseMenu)
-                    if(gameTimer.isRunning())
-                        gameTimer.stop();
-                    else
-                        gameTimer.start();
-                break;
-            case KeyEvent.VK_F1:
-                if(keyEvent.isAltDown() && keyEvent.isShiftDown())
-                    debugConsole.setVisible(true);
-            default:
-                wall.getPlayer().stop();
-        }
+    /**
+     * @param gameTimer the gameTimer to set
+     */
+    public void setGameTimer(Timer gameTimer) {
+        this.gameTimer = gameTimer;
     }
 
-    @Override
-    public void keyReleased(KeyEvent keyEvent) {
-        wall.getPlayer().stop();
+    /**
+     * @return Wall return the wall
+     */
+    public Wall getWall() {
+        return wall;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
-        Point p = mouseEvent.getPoint();
-        if(!showPauseMenu)
-            return;
-        if(continueButtonRect.contains(p)){
-            showPauseMenu = false;
-            repaint();
-        }
-        else if(restartButtonRect.contains(p)){
-            message = "Restarting Game...";
-            wall.ballReset();
-            wall.wallReset();
-            showPauseMenu = false;
-            repaint();
-        }
-        else if(exitButtonRect.contains(p)){
-            System.exit(0);
-        }
-
+    /**
+     * @param wall the wall to set
+     */
+    public void setWall(Wall wall) {
+        this.wall = wall;
     }
 
-    @Override
-    public void mousePressed(MouseEvent mouseEvent) {
-
+    /**
+     * @return String return the message
+     */
+    public String getMessage() {
+        return message;
     }
 
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-
+    /**
+     * @param message the message to set
+     */
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
+    /**
+     * @return boolean return the showPauseMenu
+     */
+    public boolean isShowPauseMenu() {
+        return showPauseMenu;
     }
 
-    @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
+    /**
+     * @param showPauseMenu the showPauseMenu to set
+     */
+    public void setShowPauseMenu(boolean showPauseMenu) {
+        this.showPauseMenu = showPauseMenu;
     }
 
-    @Override
-    public void mouseDragged(MouseEvent mouseEvent) {
-
+    /**
+     * @return Font return the menuFont
+     */
+    public Font getMenuFont() {
+        return menuFont;
     }
 
-    @Override
-    public void mouseMoved(MouseEvent mouseEvent) {
-        Point p = mouseEvent.getPoint();
-        if(exitButtonRect != null && showPauseMenu) {
-            if (exitButtonRect.contains(p) || continueButtonRect.contains(p) || restartButtonRect.contains(p))
-                this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            else
-                this.setCursor(Cursor.getDefaultCursor());
-        }
-        else{
-            this.setCursor(Cursor.getDefaultCursor());
-        }
+    /**
+     * @param menuFont the menuFont to set
+     */
+    public void setMenuFont(Font menuFont) {
+        this.menuFont = menuFont;
     }
 
-    public void onLostFocus(){
+    /**
+     * @return Rectangle return the continueButtonRect
+     */
+    public Rectangle getContinueButtonRect() {
+        return continueButtonRect;
+    }
+
+    /**
+     * @param continueButtonRect the continueButtonRect to set
+     */
+    public void setContinueButtonRect(Rectangle continueButtonRect) {
+        this.continueButtonRect = continueButtonRect;
+    }
+
+    /**
+     * @return Rectangle return the exitButtonRect
+     */
+    public Rectangle getExitButtonRect() {
+        return exitButtonRect;
+    }
+
+    /**
+     * @param exitButtonRect the exitButtonRect to set
+     */
+    public void setExitButtonRect(Rectangle exitButtonRect) {
+        this.exitButtonRect = exitButtonRect;
+    }
+
+    /**
+     * @return Rectangle return the restartButtonRect
+     */
+    public Rectangle getRestartButtonRect() {
+        return restartButtonRect;
+    }
+
+    /**
+     * @param restartButtonRect the restartButtonRect to set
+     */
+    public void setRestartButtonRect(Rectangle restartButtonRect) {
+        this.restartButtonRect = restartButtonRect;
+    }
+
+    /**
+     * @return int return the strLen
+     */
+    public int getStrLen() {
+        return strLen;
+    }
+
+    /**
+     * @param strLen the strLen to set
+     */
+    public void setStrLen(int strLen) {
+        this.strLen = strLen;
+    }
+
+    /**
+     * @return DebugConsole return the debugConsole
+     */
+    public DebugConsole getDebugConsole() {
+        return debugConsole;
+    }
+
+    /**
+     * @param debugConsole the debugConsole to set
+     */
+    public void setDebugConsole(DebugConsole debugConsole) {
+        this.debugConsole = debugConsole;
+    }
+
+    public void onLostFocus() {
         gameTimer.stop();
         message = "Focus Lost";
         repaint();
