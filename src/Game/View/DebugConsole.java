@@ -15,9 +15,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package Game;
+package Game.View;
 
 import javax.swing.*;
+
+import Game.Controller.DebugConsoleController;
+import Game.Model.Wall;
+
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
