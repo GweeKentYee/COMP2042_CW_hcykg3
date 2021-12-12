@@ -1,4 +1,4 @@
-package Game;
+package Game.Model;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,7 +16,7 @@ public class Leaderboard {
 
     public static ArrayList<JSONObject> PlayerList() throws IOException, ParseException{
 
-        FileReader file = new FileReader("src/Leaderboard.json");
+        FileReader file = new FileReader("src/Game/Model/Leaderboard.json");
         JSONTokener tokener = new JSONTokener(file);
         JSONArray list = new JSONArray (tokener);
 
@@ -97,7 +97,7 @@ public class Leaderboard {
              
         }
 
-        try (FileWriter file = new FileWriter("src/Leaderboard.json")) {
+        try (FileWriter file = new FileWriter("src/Game/Model/Leaderboard.json")) {
             file.write(newLeaderBaord.toString());
             file.flush();
         }
