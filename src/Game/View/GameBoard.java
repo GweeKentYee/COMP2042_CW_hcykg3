@@ -22,17 +22,21 @@ import javax.swing.*;
 import Game.Controller.GameBoardController;
 import Game.Model.Ball;
 import Game.Model.Brick;
+import Game.Model.GameTimer;
+import Game.Model.Leaderboard;
 import Game.Model.Player;
 import Game.Model.Wall;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
+import java.io.IOException;
+import java.text.ParseException;
 
 public class GameBoard extends JComponent{
 
     private static final String CONTINUE = "Continue";
     private static final String RESTART = "Restart";
-    private static final String EXIT = "Exit";
+    private static final String BACK = "Back to Menu";
     private static final String PAUSE = "Pause Menu";
     private static final int TEXT_SIZE = 30;
     private static final Color MENU_COLOR = new Color(0,255,0);
@@ -43,20 +47,23 @@ public class GameBoard extends JComponent{
 
     private static final Color BG_COLOR = Color.WHITE;
 
+    private GameFrame owner;
     private String mode;
-
+    
     private Timer gameTimer;
+    private GameTimer timer;
 
     private Wall wall;
 
     private String message;
+    private String extraMessage;
 
     private boolean showPauseMenu;
 
     private Font menuFont;
 
     private Rectangle continueButtonRect;
-    private Rectangle exitButtonRect;
+    private Rectangle backButtonRect;
     private Rectangle restartButtonRect;
     private int strLen;
 
@@ -65,40 +72,117 @@ public class GameBoard extends JComponent{
     private GameBoardController gameBoardController;
 
 
-    public GameBoard(JFrame owner, String mode){
+    public GameBoard(GameFrame owner, String mode){
         super();
         strLen = 0;
         showPauseMenu = false;
 
+        this.owner = owner;
         this.mode = mode;
 
         menuFont = new Font("Monospaced",Font.PLAIN,TEXT_SIZE);
 
 
         this.initialize();
+
+        timer = new GameTimer();
+
         message = "";
-        wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),6/2,new Point(300,430));
+        extraMessage = "";
+
+        wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),6/2,new Point(300,430), timer);
 
         debugConsole = new DebugConsole(owner,wall,this);
         //initialize the first level
         wall.nextLevel();
-
+        
         gameTimer = new Timer(10,e ->{
+
+            message = "";
+
+            timer.setGameStatus(true);
             wall.move();
             wall.findImpacts();
-            message = String.format("Bricks: %d Balls %d",wall.getBrickCount(),wall.getBallCount());
+
+            if (mode == "training"){
+                message = String.format("Bricks: %d Balls: %d",wall.getBrickCount(),wall.getBallCount());
+            } else {
+                extraMessage = String.format("Bricks: %d   Balls: %d   Level: %d   Score: %s   Timer: %s:%s",wall.getBrickCount(),wall.getBallCount(),wall.getLevel(),Wall.getScore(),timer.getDdMinute(),timer.getDdSecond());
+                if (timer.getMinute() == 0 && timer.getSecond() == 0){
+                    gameTimer.stop();
+                    timer.setGameStatus(false);
+                    message = "Game over";
+                    if (mode != "training"){
+                        try {
+                            if (Leaderboard.Check(Wall.getScore(), timer.getDdMinute() + ":" + timer.getDdSecond()) == true){
+                                JFrame popup = new JFrame(); 
+    
+                                String userName = (String)JOptionPane.showInputDialog(
+                                    popup, "New Highscore!\n"
+                                    + "Name:",
+                                    "Highscore",
+                                    JOptionPane.PLAIN_MESSAGE
+                                );
+    
+                                if (userName != null){
+    
+                                    Leaderboard.AddPlayer(userName,Wall.getScore(),timer.getDdMinute() + ":" + timer.getDdSecond());
+    
+                                }
+                                
+                            } 
+    
+                            owner.enableLeaderBoard();
+    
+                        } catch (IOException | ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+    
+                } 
+            }
+
             if(wall.isBallLost()){
+                wall.ballReset();
+                gameTimer.stop();
+                timer.setGameStatus(false);
                 if(wall.ballEnd()){
                     wall.wallReset();
                     message = "Game over";
+                    if (mode != "training"){
+                        try {
+                            if (Leaderboard.Check(Wall.getScore(), timer.getDdMinute() + ":" + timer.getDdSecond()) == true){
+
+                                JFrame popup = new JFrame(); 
+        
+                                String userName = (String)JOptionPane.showInputDialog(
+                                    popup, "New Highscore!\n"
+                                    + "Name:",
+                                    "Highscore",
+                                    JOptionPane.PLAIN_MESSAGE
+                                );
+        
+                                if (userName != null){
+        
+                                    Leaderboard.AddPlayer(userName,Wall.getScore(),timer.getDdMinute() + ":" + timer.getDdSecond());
+        
+                                }       
+
+                            }
+
+                            owner.enableLeaderBoard();
+
+                        } catch (IOException | ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
                 }
-                wall.ballReset();
-                gameTimer.stop();
             }
             else if(wall.isDone()){
                 if(wall.hasLevel()){
                     message = "Go to Next Level";
                     gameTimer.stop();
+                    timer.setGameStatus(false);
                     wall.ballReset();
                     wall.wallReset();
                     wall.nextLevel();
@@ -106,6 +190,7 @@ public class GameBoard extends JComponent{
                 else{
                     message = "ALL WALLS DESTROYED";
                     gameTimer.stop();
+                    timer.setGameStatus(false);
                 }
             }
 
@@ -132,6 +217,9 @@ public class GameBoard extends JComponent{
 
         g2d.setColor(Color.BLUE);
         g2d.drawString(message,250,225);
+
+        g2d.setColor(Color.BLUE);
+        g2d.drawString(extraMessage,170,225);
 
         drawBall(wall.getBall(),g2d);
 
@@ -255,12 +343,12 @@ public class GameBoard extends JComponent{
 
         y *= 3.0/2;
 
-        if(exitButtonRect == null){
-            exitButtonRect = (Rectangle) continueButtonRect.clone();
-            exitButtonRect.setLocation(x,y-exitButtonRect.height);
+        if(backButtonRect == null){
+            backButtonRect = (Rectangle) continueButtonRect.clone();
+            backButtonRect.setLocation(x,y-backButtonRect.height);
         }
 
-        g2d.drawString(EXIT,x,y);
+        g2d.drawString(BACK,x,y);
 
 
 
@@ -268,9 +356,9 @@ public class GameBoard extends JComponent{
         g2d.setColor(tmpColor);
     }
 
-    
     public void onLostFocus() {
         gameTimer.stop();
+        extraMessage = "";
         message = "Focus Lost";
         repaint();
     }
@@ -360,17 +448,17 @@ public class GameBoard extends JComponent{
     }
 
     /**
-     * @return Rectangle return the exitButtonRect
+     * @return Rectangle return the backButtonRect
      */
-    public Rectangle getExitButtonRect() {
-        return exitButtonRect;
+    public Rectangle getBackButtonRect() {
+        return backButtonRect;
     }
 
     /**
      * @param exitButtonRect the exitButtonRect to set
      */
-    public void setExitButtonRect(Rectangle exitButtonRect) {
-        this.exitButtonRect = exitButtonRect;
+    public void setBackButtonRect(Rectangle backButtonRect) {
+        this.backButtonRect = backButtonRect;
     }
 
     /**
@@ -429,5 +517,35 @@ public class GameBoard extends JComponent{
     public void setMode(String mode) {
         this.mode = mode;
     }
+
+    /**
+     * @return GameFrame return the owner
+     */
+    public GameFrame getOwner() {
+        return owner;
+    }
+
+    /**
+     * @param owner the owner to set
+     */
+    public void setOwner(GameFrame owner) {
+        this.owner = owner;
+    }
+    
+
+    /**
+     * @return GameTimer return the timer
+     */
+    public GameTimer getTimer() {
+        return timer;
+    }
+
+    /**
+     * @param timer the timer to set
+     */
+    public void setTimer(GameTimer timer) {
+        this.timer = timer;
+    }
+
 
 }

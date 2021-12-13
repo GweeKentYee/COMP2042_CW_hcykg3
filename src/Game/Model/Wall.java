@@ -24,7 +24,7 @@ import java.util.Random;
 
 public class Wall {
 
-    private static final int LEVELS_COUNT = 5;
+    private static final int LEVELS_COUNT = 8;
 
     private static final String CLAY = "Clay Brick";
     private static final String STEEL = "Steel Brick";
@@ -47,9 +47,15 @@ public class Wall {
 
     private static int score = 0;
 
-    public Wall(Rectangle drawArea, double brickDimensionRatio, Point ballPosition){
+    private GameTimer timer;
+
+    BallFactory ballFactory;
+
+    public Wall(Rectangle drawArea, double brickDimensionRatio, Point ballPosition, GameTimer timer){
 
         this.startPoint = new Point(ballPosition);
+
+        this.timer = timer;
 
         levels = makeLevels(drawArea,brickDimensionRatio);
         level = 0;
@@ -59,7 +65,7 @@ public class Wall {
 
         random = new Random();
 
-        BallFactory ballFactory = new BallFactory();
+        ballFactory = new BallFactory();
         ball = ballFactory.makeBall("RUBBERBALL",ballPosition);
 
         int speedX,speedY;
@@ -83,15 +89,37 @@ public class Wall {
         tmp[0] = Level.makeSingleTypeLevel(drawArea,30,3,brickDimensionRatio,CLAY);
         tmp[1] = Level.makeChessboardLevel(drawArea,30,3,brickDimensionRatio,CLAY,CEMENT);
         tmp[2] = Level.makeChessboardLevel(drawArea,30,3,brickDimensionRatio,CLAY,STEEL);
-        tmp[3] = Level.makeChessboardLevel(drawArea,40,4,brickDimensionRatio,STEEL,CEMENT);
-        tmp[4] = Level.makeSingleTypeLevel(drawArea,40,4,brickDimensionRatio,CEMENT);
+        tmp[3] = Level.makeChessboardLevel(drawArea,30,3,brickDimensionRatio,STEEL,CEMENT);
+        tmp[4] = Level.makeChessboardLevel(drawArea,40,4,brickDimensionRatio,STEEL,CEMENT);
+        tmp[5] = Level.makeSingleTypeLevel(drawArea,40,4,brickDimensionRatio,CEMENT);
+        tmp[6] = Level.makeSingleTypeLevel(drawArea,40,4,brickDimensionRatio,STEEL);
+        tmp[7] = Level.makeSingleTypeLevel(drawArea,50,5,brickDimensionRatio,CEMENT);
         return tmp;
     }
 
     public void nextLevel(){
         bricks = levels[level++];
         this.brickCount = bricks.length;
-    }
+        timer.setSecond(0);
+        if (level == 3)
+            {
+                timer.setMinute(5);
+
+            } else if (level >= 6) {
+
+                timer.setMinute(8);
+
+            } else if (level >= 4) {
+
+                timer.setMinute(6);
+
+            } else if (level >= 1){
+
+                timer.setMinute(4);
+
+            }
+        }
+       
 
     public void move(){
         player.move();
@@ -254,6 +282,20 @@ public class Wall {
      */
     public static void setScore(int score) {
         Wall.score = score;
+    }
+
+    /**
+     * @return int return the level
+     */
+    public int getLevel() {
+        return level;
+    }
+
+    /**
+     * @param level the level to set
+     */
+    public void setLevel(int level) {
+        this.level = level;
     }
 
 }
