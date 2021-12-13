@@ -23,8 +23,6 @@ import Game.Controller.DebugConsoleController;
 import Game.Model.Wall;
 
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 public class DebugConsole extends JDialog {
 
