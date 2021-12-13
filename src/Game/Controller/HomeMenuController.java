@@ -27,11 +27,13 @@ public class HomeMenuController implements MouseListener, MouseMotionListener {
            homeMenu.getOwner().enableGameBoard("training", "HomeMenu");
         }
         else if(homeMenu.getExitButton().contains(p)){
-            System.out.println("Goodbye " + System.getProperty("user.name"));
             System.exit(0);
         } 
         else if(homeMenu.getLeaderboardButton().contains(p)){
             homeMenu.getOwner().enableLeaderBoard();
+        }
+        else if(homeMenu.getInfoButton().contains(p)){
+            homeMenu.getOwner().enableGameInfo();
         }
     }
 
@@ -55,6 +57,10 @@ public class HomeMenuController implements MouseListener, MouseMotionListener {
         else if(homeMenu.getLeaderboardButton().contains(p)){
             homeMenu.setLeaderboardClicked(true);
             homeMenu.repaint(homeMenu.getLeaderboardButton().x,homeMenu.getLeaderboardButton().y,homeMenu.getLeaderboardButton().width+1,homeMenu.getLeaderboardButton().height+1);
+        }
+        else if(homeMenu.getInfoButton().contains(p)){
+            homeMenu.setInfoClicked(true);
+            homeMenu.repaint(homeMenu.getInfoButton().x,homeMenu.getInfoButton().y,homeMenu.getInfoButton().width+1,homeMenu.getInfoButton().height+1);
         }
     }
 
@@ -80,6 +86,11 @@ public class HomeMenuController implements MouseListener, MouseMotionListener {
             homeMenu.repaint(homeMenu.getLeaderboardButton().x,homeMenu.getLeaderboardButton().y,homeMenu.getLeaderboardButton().width+1,homeMenu.getLeaderboardButton().height+1);
             homeMenu.setCursor(Cursor.getDefaultCursor());
         }
+        else if(homeMenu.isInfoClicked()){
+            homeMenu.setInfoClicked(false);
+            homeMenu.repaint(homeMenu.getInfoButton().x,homeMenu.getInfoButton().y,homeMenu.getInfoButton().width+1,homeMenu.getInfoButton().height+1);
+            homeMenu.setCursor(Cursor.getDefaultCursor());
+        }
     }
 
     @Override
@@ -101,7 +112,7 @@ public class HomeMenuController implements MouseListener, MouseMotionListener {
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();
-        if(homeMenu.getStartButton().contains(p) || homeMenu.getTrainingButton().contains(p) || homeMenu.getExitButton().contains(p) || homeMenu.getLeaderboardButton().contains(p))
+        if(homeMenu.getStartButton().contains(p) || homeMenu.getTrainingButton().contains(p) || homeMenu.getExitButton().contains(p) || homeMenu.getLeaderboardButton().contains(p) || homeMenu.getInfoButton().contains(p))
             homeMenu.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         else
             homeMenu.setCursor(Cursor.getDefaultCursor());
