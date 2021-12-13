@@ -31,6 +31,9 @@ public class CementBrick extends Brick {
         if(super.isBroken())
             return false;
         super.impact();
+        if (super.isBroken()){
+            Wall.setScore(Wall.getScore() + 2);
+        }
         if(!super.isBroken()){
             crack.makeCrack(point,dir);
             updateBrick();
