@@ -3,7 +3,9 @@ package Game.Controller;
 import java.awt.*;
 import java.awt.event.*;
 
+import Game.Model.Wall;
 import Game.View.GameBoard;
+import Game.View.GameFrame;
 
 public class GameBoardController implements KeyListener,MouseListener,MouseMotionListener {
 
@@ -41,13 +43,19 @@ public class GameBoardController implements KeyListener,MouseListener,MouseMotio
                 gameBoard.setShowPauseMenu(!gameBoard.isShowPauseMenu());
                 gameBoard.repaint();
                 gameBoard.getGameTimer().stop();
+                gameBoard.getTimer().setGameStatus(false);
                 break;
             case KeyEvent.VK_SPACE:
-                if(!gameBoard.isShowPauseMenu())
-                    if(gameBoard.getGameTimer().isRunning())
+                if(!gameBoard.isShowPauseMenu()){
+                    if(gameBoard.getGameTimer().isRunning()){
                         gameBoard.getGameTimer().stop();
-                    else
+                        gameBoard.getTimer().setGameStatus(false);
+                    }
+                    else{
                         gameBoard.getGameTimer().start();
+                        gameBoard.getTimer().setGameStatus(true);
+                    }
+                }
                 break;
             case KeyEvent.VK_F1:
                 if (gameBoard.getMode() == "training"){
@@ -75,13 +83,18 @@ public class GameBoardController implements KeyListener,MouseListener,MouseMotio
         }
         else if(gameBoard.getRestartButtonRect().contains(p)){
             gameBoard.setMessage("Restarting Game...");
-            gameBoard.getWall().ballReset();
-            gameBoard.getWall().wallReset();
+            Wall.setScore(0);
+            if (gameBoard.getMode() == "training"){
+                gameBoard.getOwner().enableGameBoard("training", "Game");
+            } else {
+                gameBoard.getOwner().enableGameBoard("ranked", "Game");
+            }
             gameBoard.setShowPauseMenu(false);
-            gameBoard.repaint();
         }
-        else if(gameBoard.getExitButtonRect().contains(p)){
-            System.exit(0);
+        else if(gameBoard.getBackButtonRect().contains(p)){
+            Wall.setScore(0);
+            gameBoard.getOwner().dispose();
+            new GameFrame().initialize();
         }
 
     }
@@ -114,8 +127,8 @@ public class GameBoardController implements KeyListener,MouseListener,MouseMotio
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();
-        if(gameBoard.getExitButtonRect() != null && gameBoard.isShowPauseMenu()) {
-            if (gameBoard.getExitButtonRect().contains(p) || gameBoard.getContinueButtonRect().contains(p) || gameBoard.getRestartButtonRect().contains(p))
+        if(gameBoard.getBackButtonRect() != null && gameBoard.isShowPauseMenu()) {
+            if (gameBoard.getBackButtonRect().contains(p) || gameBoard.getContinueButtonRect().contains(p) || gameBoard.getRestartButtonRect().contains(p))
                 gameBoard.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             else
                 gameBoard.setCursor(Cursor.getDefaultCursor());

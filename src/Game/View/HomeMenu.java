@@ -30,29 +30,24 @@ public class HomeMenu extends JComponent {
 
     private static final String GREETINGS = "Welcome to:";
     private static final String GAME_TITLE = "Brick Destroy";
-    private static final String CREDITS = "Version 0.1";
+    private static final String CREDITS = "Refactored Version";
     private static final String START_TEXT = "Start";
     private static final String TRAINING_TEXT = "Training";
-    private static final String EXIT_TEXT = "Exit";
     private static final String LEADERBOARD_TEXT = "Leaderboard";
+    private static final String INFO_TEXT = "Info";
+    private static final String EXIT_TEXT = "Exit";
 
-    private static final Color BG_COLOR = Color.GREEN.darker();
-    private static final Color BORDER_COLOR = new Color(200,8,21); //Venetian Red
-    private static final Color DASH_BORDER_COLOR = new  Color(255, 216, 0);//school bus yellow
+    private static final Color BG_COLOR = Color.CYAN.darker();
     private static final Color TEXT_COLOR = new Color(16, 52, 166);//egyptian blue
     private static final Color CLICKED_BUTTON_COLOR = BG_COLOR.brighter();
     private static final Color CLICKED_TEXT = Color.WHITE;
-    private static final int BORDER_SIZE = 5;
-    private static final float[] DASHES = {12,6};
 
     private Rectangle menuFace;
     private Rectangle trainingButton;
     private Rectangle startButton;
+    private Rectangle infoButton;
     private Rectangle exitButton;
     private Rectangle leaderboardButton;
-
-    private BasicStroke borderStoke;
-    private BasicStroke borderStoke_noDashes;
 
     private Font greetingsFont;
     private Font gameTitleFont;
@@ -63,6 +58,7 @@ public class HomeMenu extends JComponent {
 
     private boolean startClicked;
     private boolean trainingClicked;
+    private boolean infoClicked;
     private boolean exitClicked;
     private boolean leaderboardClicked;
 
@@ -85,19 +81,17 @@ public class HomeMenu extends JComponent {
         menuFace = new Rectangle(new Point(0,0),area);
         this.setPreferredSize(area);
 
-        Dimension btnDim = new Dimension((area.width / 3) + 40, area.height / 12);
+        Dimension btnDim = new Dimension((area.width / 3) + 70, area.height / 12);
         startButton = new Rectangle(btnDim);
         trainingButton = new Rectangle(btnDim);
         exitButton = new Rectangle(btnDim);
         leaderboardButton = new Rectangle(btnDim);
-
-        borderStoke = new BasicStroke(BORDER_SIZE,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,0,DASHES,0);
-        borderStoke_noDashes = new BasicStroke(BORDER_SIZE,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND);
+        infoButton = new Rectangle(btnDim);
 
         greetingsFont = new Font("Noto Mono",Font.PLAIN,25);
         gameTitleFont = new Font("Noto Mono",Font.BOLD,40);
         creditsFont = new Font("Monospaced",Font.PLAIN,10);
-        buttonFont = new Font("Monospaced",Font.PLAIN,trainingButton.height-6);
+        buttonFont = new Font("Monospaced",Font.PLAIN,trainingButton.height-8);
 
     }
 
@@ -142,12 +136,6 @@ public class HomeMenu extends JComponent {
 
         Stroke tmp = g2d.getStroke();
 
-        g2d.setStroke(borderStoke_noDashes);
-        g2d.setColor(DASH_BORDER_COLOR);
-        g2d.draw(menuFace);
-
-        g2d.setStroke(borderStoke);
-        g2d.setColor(BORDER_COLOR);
         g2d.draw(menuFace);
 
         g2d.setStroke(tmp);
@@ -192,25 +180,26 @@ public class HomeMenu extends JComponent {
 
         FontRenderContext frc = g2d.getFontRenderContext();
 
-        Rectangle2D sxtRect = buttonFont.getStringBounds(START_TEXT,frc);
-        Rectangle2D txtRect = buttonFont.getStringBounds(TRAINING_TEXT,frc);
-        Rectangle2D extRect = buttonFont.getStringBounds(EXIT_TEXT,frc);
-        Rectangle2D lxtRect = buttonFont.getStringBounds(LEADERBOARD_TEXT,frc);
+        Rectangle2D StartRect = buttonFont.getStringBounds(START_TEXT,frc);
+        Rectangle2D TrainingRect = buttonFont.getStringBounds(TRAINING_TEXT,frc);
+        Rectangle2D ExitRect = buttonFont.getStringBounds(EXIT_TEXT,frc);
+        Rectangle2D LeaderboardRect = buttonFont.getStringBounds(LEADERBOARD_TEXT,frc);
+        Rectangle2D InfoRect = buttonFont.getStringBounds(INFO_TEXT,frc);
 
         g2d.setFont(buttonFont);
 
         int x = (menuFace.width - startButton.width) / 2;
-        int y =(int) ((menuFace.height - startButton.height) * 0.6);
+        int y =(int) ((menuFace.height - startButton.height) * 0.5);
 
 
 
         startButton.setLocation(x,y);
 
-        x = (int)(startButton.getWidth() - sxtRect.getWidth()) / 2;
-        y = (int)(startButton.getHeight() - sxtRect.getHeight()) / 2;
+        x = (int)(startButton.getWidth() - StartRect.getWidth()) / 2;
+        y = (int)(startButton.getHeight() - StartRect.getHeight()) / 2;
 
         x += startButton.x;
-        y += startButton.y + (startButton.height * 0.9);
+        y += startButton.y + (startButton.height * 0.8);
 
         if(startClicked){
             Color tmp = g2d.getColor();
@@ -228,7 +217,7 @@ public class HomeMenu extends JComponent {
         x = startButton.x;
         y = startButton.y;
 
-        int space = 40;
+        int space = 45;
 
         y += space;
 
@@ -236,11 +225,11 @@ public class HomeMenu extends JComponent {
 
         trainingButton.setLocation(x,y);
 
-        x = (int)(trainingButton.getWidth() - txtRect.getWidth()) / 2;
-        y = (int)(trainingButton.getHeight() - txtRect.getHeight()) / 2;
+        x = (int)(trainingButton.getWidth() - TrainingRect.getWidth()) / 2;
+        y = (int)(trainingButton.getHeight() - TrainingRect.getHeight()) / 2;
 
         x += trainingButton.x;
-        y += trainingButton.y + (trainingButton.height * 0.9);
+        y += trainingButton.y + (trainingButton.height * 0.8);
 
         if(trainingClicked){
             Color tmp = g2d.getColor();
@@ -260,44 +249,13 @@ public class HomeMenu extends JComponent {
 
         y += space;
 
-
-
-        exitButton.setLocation(x,y);
-
-        x = (int)(exitButton.getWidth() - extRect.getWidth()) / 2;
-        y = (int)(exitButton.getHeight() - extRect.getHeight()) / 2;
-
-        x += exitButton.x;
-        y += exitButton.y + (trainingButton.height * 0.9);
-
-        if(exitClicked){
-            Color tmp = g2d.getColor();
-
-            g2d.setColor(CLICKED_BUTTON_COLOR);
-            g2d.draw(exitButton);
-            g2d.setColor(CLICKED_TEXT);
-            g2d.drawString(EXIT_TEXT,x,y);
-            g2d.setColor(tmp);
-        }
-        else{
-            g2d.draw(exitButton);
-            g2d.drawString(EXIT_TEXT,x,y);
-        }
-
-        x = trainingButton.x;
-        y = exitButton.y;
-
-        y+= space;
-
-
-
         leaderboardButton.setLocation(x,y);
 
-        x = (int)(leaderboardButton.getWidth() - lxtRect.getWidth()) / 2;
-        y = (int)(leaderboardButton.getHeight() - lxtRect.getHeight()) / 2;
+        x = (int)(leaderboardButton.getWidth() - LeaderboardRect.getWidth()) / 2;
+        y = (int)(leaderboardButton.getHeight() - LeaderboardRect.getHeight()) / 2;
 
         x += leaderboardButton.x;
-        y += leaderboardButton.y + (exitButton.height * 0.9);
+        y += leaderboardButton.y + (trainingButton.height * 0.8);
 
         if(leaderboardClicked){
             Color tmp = g2d.getColor();
@@ -313,6 +271,63 @@ public class HomeMenu extends JComponent {
             g2d.drawString(LEADERBOARD_TEXT,x,y);
         }
 
+        x = trainingButton.x;
+        y = leaderboardButton.y;
+
+        y+= space;
+
+
+        infoButton.setLocation(x,y);
+
+        x = (int)(infoButton.getWidth() - InfoRect.getWidth()) / 2;
+        y = (int)(infoButton.getHeight() - InfoRect.getHeight()) / 2;
+
+        x += infoButton.x;
+        y += infoButton.y + (leaderboardButton.height * 0.8);
+
+        if(infoClicked){
+            Color tmp = g2d.getColor();
+
+            g2d.setColor(CLICKED_BUTTON_COLOR);
+            g2d.draw(infoButton);
+            g2d.setColor(CLICKED_TEXT);
+            g2d.drawString(INFO_TEXT,x,y);
+            g2d.setColor(tmp);
+        }
+        else{
+            g2d.draw(infoButton);
+            g2d.drawString(INFO_TEXT,x,y);
+        }
+
+        x = leaderboardButton.x;
+        y = infoButton.y;
+
+        y+= space;
+
+
+        exitButton.setLocation(x,y);
+
+        x = (int)(exitButton.getWidth() - ExitRect.getWidth()) / 2;
+        y = (int)(exitButton.getHeight() - ExitRect.getHeight()) / 2;
+
+        x += exitButton.x;
+        y += exitButton.y + (leaderboardButton.height * 0.8);
+
+        if(exitClicked){
+            Color tmp = g2d.getColor();
+
+            g2d.setColor(CLICKED_BUTTON_COLOR);
+            g2d.draw(exitButton);
+            g2d.setColor(CLICKED_TEXT);
+            g2d.drawString(EXIT_TEXT,x,y);
+            g2d.setColor(tmp);
+        }
+        else{
+            g2d.draw(exitButton);
+            g2d.drawString(EXIT_TEXT,x,y);
+        }
+
+        
     }
 
 
@@ -328,34 +343,6 @@ public class HomeMenu extends JComponent {
      */
     public void setMenuFace(Rectangle menuFace) {
         this.menuFace = menuFace;
-    }
-
-    /**
-     * @return BasicStroke return the borderStoke
-     */
-    public BasicStroke getBorderStoke() {
-        return borderStoke;
-    }
-
-    /**
-     * @param borderStoke the borderStoke to set
-     */
-    public void setBorderStoke(BasicStroke borderStoke) {
-        this.borderStoke = borderStoke;
-    }
-
-    /**
-     * @return BasicStroke return the borderStoke_noDashes
-     */
-    public BasicStroke getBorderStoke_noDashes() {
-        return borderStoke_noDashes;
-    }
-
-    /**
-     * @param borderStoke_noDashes the borderStoke_noDashes to set
-     */
-    public void setBorderStoke_noDashes(BasicStroke borderStoke_noDashes) {
-        this.borderStoke_noDashes = borderStoke_noDashes;
     }
 
     /**
@@ -538,6 +525,35 @@ public class HomeMenu extends JComponent {
      */
     public void setLeaderboardClicked(boolean leaderboardClicked) {
         this.leaderboardClicked = leaderboardClicked;
+    }
+
+
+    /**
+     * @return Rectangle return the infoButton
+     */
+    public Rectangle getInfoButton() {
+        return infoButton;
+    }
+
+    /**
+     * @param infoButton the infoButton to set
+     */
+    public void setInfoButton(Rectangle infoButton) {
+        this.infoButton = infoButton;
+    }
+
+    /**
+     * @return boolean return the infoClicked
+     */
+    public boolean isInfoClicked() {
+        return infoClicked;
+    }
+
+    /**
+     * @param infoClicked the infoClicked to set
+     */
+    public void setInfoClicked(boolean infoClicked) {
+        this.infoClicked = infoClicked;
     }
 
 }

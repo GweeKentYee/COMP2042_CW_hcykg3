@@ -1,0 +1,41 @@
+.label {
+    -fx-font-size: 18px;
+}
+
+.AnchorPane {
+    -fx-background-image : url("/Game/Style/HallOfFame.png");
+    -fx-background-size: 460px, 800px;
+}
+
+#lblTitle{
+    -fx-font: Bold 30px "Arial";
+
+}
+
+#lblScore, #lblName, #lblTime{
+    -fx-font-size:15px;
+    -fx-font-weight: Bold;
+}
+
+#btnBack {
+    -fx-font-size:18px;
+}
+
+#lblHTP_1, #lblHTP_2  ,#lblHTP_3, #lblHTP_4 , #lblHTP_5, #lblHTP_6 , #lblHTP_7, #lblHTP_8 {
+    -fx-font-size: 14px;
+}
+
+#GameInfoPane {
+    -fx-background-color : rgb(138, 184, 138);
+}
+
+#lblBrick_1 {
+    -fx-text-fill: rgb(99, 9, 44);
+} 
+#lblBrick_2 {
+    -fx-text-fill: rgba(27, 89, 124, 0.973);
+
+} 
+#lblBrick_3 {
+    -fx-text-fill: rgba(90, 111, 117, 0.973);
+}

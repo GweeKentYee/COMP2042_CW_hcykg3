@@ -2,24 +2,35 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="384.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.LeaderboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="464.0" styleClass="AnchorPane" stylesheets="@../Style/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.Controller.LeaderboardController">
    <children>
-      <Label fx:id="Place_1" layoutX="99.0" layoutY="46.0" text="Label" />
-      <Label fx:id="Place_2" layoutX="99.0" layoutY="77.0" text="Label" />
-      <Label fx:id="Place_3" layoutX="99.0" layoutY="107.0" text="Label" />
-      <Label fx:id="Place_4" layoutX="99.0" layoutY="136.0" text="Label" />
-      <Label fx:id="Place_5" layoutX="99.0" layoutY="169.0" text="Label" />
-      <Label fx:id="Place_6" layoutX="99.0" layoutY="204.0" text="Label" />
-      <Label fx:id="Place_7" layoutX="99.0" layoutY="236.0" text="Label" />
-      <Label fx:id="Place_8" layoutX="99.0" layoutY="272.0" text="Label" />
-      <Label fx:id="Place_9" layoutX="99.0" layoutY="310.0" text="Label" />
-      <Label fx:id="Place_10" layoutX="99.0" layoutY="345.0" text="Label" />
-      <Button layoutX="269.0" layoutY="213.0" mnemonicParsing="false" onAction="#btnOkClicked" text="Submit" />
-      <TextField layoutX="222.0" layoutY="174.0" onAction="#tfScore" />
-      <TextField layoutX="222.0" layoutY="141.0" onAction="#tfName" />
+      <Label fx:id="lblName_1" layoutX="66.0" layoutY="90.0" text="Label" />
+      <Label fx:id="lblName_2" layoutX="66.0" layoutY="125.0" text="Label" />
+      <Label fx:id="lblName_3" layoutX="66.0" layoutY="160.0" text="Label" />
+      <Label fx:id="lblName_4" layoutX="66.0" layoutY="195.0" text="Label" />
+      <Label fx:id="lblName_5" layoutX="66.0" layoutY="230.0" text="Label" />
+      <Label fx:id="lblName_6" layoutX="66.0" layoutY="265.0" text="Label" />
+      <Label fx:id="lblName_7" layoutX="66.0" layoutY="300.0" text="Label" />
+      <Button fx:id="btnBack" layoutX="192.0" layoutY="393.0" mnemonicParsing="false" onAction="#btnOkClicked" prefHeight="36.0" prefWidth="80.0" text="Label" />
+      <Label fx:id="lblTitle" layoutX="115.0" layoutY="10.0" text="label" />
+      <Label fx:id="lblScore_1" layoutX="218.0" layoutY="90.0" text="Label" />
+      <Label fx:id="lblScore_2" layoutX="218.0" layoutY="125.0" text="Label" />
+      <Label fx:id="lblScore_3" layoutX="218.0" layoutY="160.0" text="Label" />
+      <Label fx:id="lblScore_4" layoutX="218.0" layoutY="195.0" text="Label" />
+      <Label fx:id="lblScore_5" layoutX="218.0" layoutY="230.0" text="Label" />
+      <Label fx:id="lblScore_6" layoutX="218.0" layoutY="265.0" text="Label" />
+      <Label fx:id="lblScore_7" layoutX="218.0" layoutY="300.0" text="Label" />
+      <Label fx:id="lblTime_1" layoutX="328.0" layoutY="90.0" text="Label" />
+      <Label fx:id="lblTime_2" layoutX="328.0" layoutY="125.0" text="Label" />
+      <Label fx:id="lblTime_3" layoutX="328.0" layoutY="160.0" text="Label" />
+      <Label fx:id="lblTime_4" layoutX="328.0" layoutY="195.0" text="Label" />
+      <Label fx:id="lblTime_5" layoutX="328.0" layoutY="230.0" text="Label" />
+      <Label fx:id="lblTime_6" layoutX="328.0" layoutY="265.0" text="Label" />
+      <Label fx:id="lblTime_7" layoutX="328.0" layoutY="300.0" text="Label" />
+      <Label fx:id="lblName" layoutX="81.0" layoutY="61.0" text="Label" />
+      <Label fx:id="lblScore" layoutX="219.0" layoutY="61.0" text="Label" />
+      <Label fx:id="lblTime" layoutX="329.0" layoutY="61.0" text="Label" />
    </children>
 </AnchorPane>

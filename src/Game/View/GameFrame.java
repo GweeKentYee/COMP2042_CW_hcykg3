@@ -20,14 +20,8 @@ package Game.View;
 import javax.swing.*;
 
 import Game.Controller.GameFrameController;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 
 import java.awt.*;
-import java.io.IOException;
 
 public class GameFrame extends JFrame{
 
@@ -36,22 +30,30 @@ public class GameFrame extends JFrame{
     private GameBoard gameBoard;
     private HomeMenu homeMenu;
 
+    private LeaderboardFrame leaderboardFrame;
+    private GameInfoFrame gameInfoFrame;
+
     private boolean gaming;
+
+    private String tab;
 
     public GameFrame(){
 
         super();
 
+        leaderboardFrame = new LeaderboardFrame(this);
+
+        gameInfoFrame = new GameInfoFrame(this);
+
         gaming = false;
 
         this.setLayout(new BorderLayout());
 
-        homeMenu = new HomeMenu(this,new Dimension(450,400));
+        homeMenu = new HomeMenu(this,new Dimension(450,450));
 
         this.add(homeMenu,BorderLayout.CENTER);
 
         this.setUndecorated(true);
-
 
     }
 
@@ -61,11 +63,17 @@ public class GameFrame extends JFrame{
         this.pack();
         this.autoLocate();
         this.setVisible(true);
+        this.setResizable(false);
     }
 
-    public void enableGameBoard(String mode){
+    public void enableGameBoard(String mode, String tab){
+        this.tab = tab;
         this.dispose();
-        this.remove(homeMenu);
+        if(this.tab == "HomeMenu"){
+            this.remove(homeMenu);
+        } else {
+            this.remove(gameBoard);
+        }
         gameBoard = new GameBoard(this,mode);
         this.add(gameBoard,BorderLayout.CENTER);
         this.setUndecorated(false);
@@ -77,42 +85,22 @@ public class GameFrame extends JFrame{
 
     public void enableLeaderBoard(){
         this.dispose();
-        this.remove(homeMenu);
-        final JFXPanel jfxPanel = new JFXPanel();
-        this.setUndecorated(false);
-        Platform.runLater(() -> {
-            initLeaderboardFX(jfxPanel);
-        });
+        leaderboardFrame.initialize();
 
     }
 
-    private void autoLocate(){
+    public void enableGameInfo(){
+        this.dispose();
+        gameInfoFrame.initialize();
+
+    }
+
+    void autoLocate(){
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (size.width - this.getWidth()) / 2;
         int y = (size.height - this.getHeight()) / 2;
         this.setLocation(x,y);
     }
-
-    private void initLeaderboardFX(JFXPanel jfxPanel){
-
-        this.add(jfxPanel, BorderLayout.CENTER);   
-
-        try {
-            Parent root = FXMLLoader.load(GameFrame.class.getResource("Leaderboard.fxml"));
-            Scene scene = new Scene(root);
-
-            jfxPanel.setScene(scene);
-            initialize();
-        
-        } catch (IOException e) {
-
-            e.printStackTrace();
-            System.exit(1);
-
-        }
-
-    }
-
 
     /**
      * @return GameBoard return the gameBoard
@@ -154,6 +142,36 @@ public class GameFrame extends JFrame{
      */
     public void setGaming(boolean gaming) {
         this.gaming = gaming;
+    }
+
+
+    /**
+     * @return JFrame return the leaderboardFrame
+     */
+    public JFrame getLeaderboardFrame() {
+        return leaderboardFrame;
+    }
+
+    /**
+     * @param leaderboardFrame the leaderboardFrame to set
+     */
+    public void setLeaderboardFrame(LeaderboardFrame leaderboardFrame) {
+        this.leaderboardFrame = leaderboardFrame;
+    }
+
+
+    /**
+     * @return GameInfoFrame return the gameInfoFrame
+     */
+    public GameInfoFrame getGameInfoFrame() {
+        return gameInfoFrame;
+    }
+
+    /**
+     * @param gameInfoFrame the gameInfoFrame to set
+     */
+    public void setGameInfoFrame(GameInfoFrame gameInfoFrame) {
+        this.gameInfoFrame = gameInfoFrame;
     }
 
 }

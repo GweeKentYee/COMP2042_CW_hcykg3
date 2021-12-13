@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane fx:id = "GameInfoPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="674.0" stylesheets="@../Style/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.Controller.GameInfoController">
+   <children>
+      <Label fx:id="lblTitleInfo" layoutX="296.0" layoutY="14.0" text="Game Info" />
+      <Separator layoutX="-1.0" layoutY="57.0" prefHeight="1.0" prefWidth="674.0" />
+      <Pane fx:id="PaneHowToPlay" layoutX="-1.0" layoutY="57.0" prefHeight="405.0" prefWidth="674.0">
+         <children>
+            <Label fx:id="lblHTP_1" layoutX="14.0" layoutY="50.0" prefHeight="37.0" prefWidth="424.0" text="1. Players will have two modes to pick from (Ranked or Training)" />
+            <Label fx:id="lblHTP" layoutX="21.0" layoutY="14.0" text="How to Play" />
+            <Pane fx:id="PaneScoring" layoutX="438.0" prefHeight="186.0" prefWidth="236.0">
+               <children>
+                  <Label fx:id="lblScoring" layoutX="88.0" layoutY="8.0" text="Scoring" />
+                  <Label fx:id="lblBrick_1" layoutX="12.0" layoutY="53.0" text="Clay Brick" />
+                  <Label fx:id="lblBrick_2" layoutX="12.0" layoutY="94.0" text="Steel Brick " />
+                  <Label fx:id="lblBrick_3" layoutX="12.0" layoutY="137.0" text="Cement Brick" />
+                  <Label layoutX="129.0" layoutY="53.0" text="1 point" />
+                  <Label layoutX="129.0" layoutY="94.0" prefHeight="27.0" prefWidth="95.0" text="2 / 4 points" />
+                  <Label layoutX="129.0" layoutY="137.0" text="3 points" />
+                  <Separator layoutX="-1.0" layoutY="183.0" prefHeight="3.0" prefWidth="236.0" />
+                  <Separator layoutX="-2.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="186.0" prefWidth="6.0" />
+               </children>
+            </Pane>
+            <Label fx:id="lblHTP_2" layoutX="14.0" layoutY="79.0" prefHeight="37.0" prefWidth="424.0" text="2. Training mode allows the players to skip levels and adjust the" />
+            <Label fx:id="lblHTP_3" layoutX="29.0" layoutY="111.0" prefHeight="20.0" prefWidth="387.0" text="ball speed at the Settings Panel" />
+            <Label fx:id="lblHTP_4" layoutX="14.0" layoutY="128.0" prefHeight="37.0" prefWidth="424.0" text="3. Ranked mode will not have access to the panel and it will record" />
+            <Label fx:id="lblHTP_5" layoutX="29.0" layoutY="158.0" prefHeight="20.0" prefWidth="387.0" text="the scores based on the bricks the player have destroyed" />
+            <Label fx:id="lblHTP_6" layoutX="14.0" layoutY="190.0" prefHeight="20.0" prefWidth="646.0" text="4. If a player doesn't finish the level before the count down timer reaches 0, they will lose the game" />
+            <Label fx:id="lblHTP_7" layoutX="14.0" layoutY="217.0" prefHeight="20.0" prefWidth="646.0" text="5. The top 7 players will be recorded inside the leaderboard (Arranged by Level -&gt; Score -&gt; Time)" />
+            <Label fx:id="lblKeyBind" layoutX="21.0" layoutY="248.0" text="Key Binds" />
+            <Label fx:id="lblKeyBind_1" layoutX="21.0" layoutY="275.0" prefHeight="37.0" prefWidth="192.0" text="A - &gt; Move Left " />
+            <Label layoutX="21.0" layoutY="310.0" text="D -&gt; Move Right" />
+            <Label layoutX="21.0" layoutY="340.0" text="Space -&gt; Start / Pause " />
+            <Label layoutX="295.0" layoutY="275.0" text="Esc -&gt; Pause Menu" />
+            <Label layoutX="295.0" layoutY="310.0" prefHeight="27.0" prefWidth="337.0" text="Alt + Shift + F1 -&gt; Settings Panel" />
+            <Button fx:id="btnBack" layoutX="295.0" layoutY="351.0" mnemonicParsing="false" onAction="#BackToMenu" prefHeight="27.0" prefWidth="64.0" text="Back" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
