@@ -31,6 +31,7 @@ public class GameFrame extends JFrame{
     private HomeMenu homeMenu;
 
     private LeaderboardFrame leaderboardFrame;
+    private GameInfoFrame gameInfoFrame;
 
     private boolean gaming;
 
@@ -42,11 +43,13 @@ public class GameFrame extends JFrame{
 
         leaderboardFrame = new LeaderboardFrame(this);
 
+        gameInfoFrame = new GameInfoFrame(this);
+
         gaming = false;
 
         this.setLayout(new BorderLayout());
 
-        homeMenu = new HomeMenu(this,new Dimension(450,400));
+        homeMenu = new HomeMenu(this,new Dimension(450,450));
 
         this.add(homeMenu,BorderLayout.CENTER);
 
@@ -66,7 +69,7 @@ public class GameFrame extends JFrame{
     public void enableGameBoard(String mode, String tab){
         this.tab = tab;
         this.dispose();
-        if(tab == "HomeMenu"){
+        if(this.tab == "HomeMenu"){
             this.remove(homeMenu);
         } else {
             this.remove(gameBoard);
@@ -83,6 +86,12 @@ public class GameFrame extends JFrame{
     public void enableLeaderBoard(){
         this.dispose();
         leaderboardFrame.initialize();
+
+    }
+
+    public void enableGameInfo(){
+        this.dispose();
+        gameInfoFrame.initialize();
 
     }
 
@@ -148,6 +157,21 @@ public class GameFrame extends JFrame{
      */
     public void setLeaderboardFrame(LeaderboardFrame leaderboardFrame) {
         this.leaderboardFrame = leaderboardFrame;
+    }
+
+
+    /**
+     * @return GameInfoFrame return the gameInfoFrame
+     */
+    public GameInfoFrame getGameInfoFrame() {
+        return gameInfoFrame;
+    }
+
+    /**
+     * @param gameInfoFrame the gameInfoFrame to set
+     */
+    public void setGameInfoFrame(GameInfoFrame gameInfoFrame) {
+        this.gameInfoFrame = gameInfoFrame;
     }
 
 }
