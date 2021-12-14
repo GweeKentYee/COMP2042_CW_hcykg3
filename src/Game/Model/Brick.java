@@ -1,3 +1,20 @@
+/*
+ *  Brick Destroy - A simple Arcade video game
+ *   Copyright (C) 2017  Filippo Ranza
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package Game.Model;
 
 import java.awt.*;
@@ -32,7 +49,7 @@ abstract public class Brick  {
     public Brick(String name, Point pos,Dimension size,Color border,Color inner,int strength){
         broken = false;
         this.name = name;
-        brickShape = makebrickShape(pos,size);
+        brickShape = makeBrickShape(pos,size);
         this.border = border;
         this.inner = inner;
         this.fullStrength = this.strength = strength;
@@ -84,12 +101,12 @@ abstract public class Brick  {
     public void impact(){
         strength--;
         broken = (strength == 0);
-        if (broken == true){
+        if (broken){
             Wall.setScore(Wall.getScore() + 1);
         }
     }
 
-    private Shape makebrickShape(Point pos,Dimension size){
+    private Shape makeBrickShape(Point pos, Dimension size){
         return new Rectangle(pos,size);
     };
 

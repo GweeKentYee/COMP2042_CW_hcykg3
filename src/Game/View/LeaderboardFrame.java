@@ -26,6 +26,8 @@ public class LeaderboardFrame extends JFrame{
 
         this.gameFrame = gameFrame;
 
+        this.setPreferredSize(new Dimension(480, 500));
+
         this.setLayout(new BorderLayout());
 
         this.setUndecorated(false);
@@ -57,7 +59,7 @@ public class LeaderboardFrame extends JFrame{
         this.add(jfxPanel, BorderLayout.CENTER);
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(GameFrame.class.getResource("Leaderboard.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(LeaderboardFrame.class.getResource("Leaderboard.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
 

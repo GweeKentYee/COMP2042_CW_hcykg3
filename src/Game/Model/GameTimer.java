@@ -81,8 +81,4 @@ public class GameTimer {
         return gameStatus;
     }
 
-    public void resetTimer(){
-        second = 0;
-        minute = 4;
-    }
 }

@@ -114,19 +114,31 @@ public class GameBoard extends JComponent{
                     message = "Game over";
                     if (mode != "training"){
                         try {
-                            if (Leaderboard.Check(Wall.getScore(), timer.getDdMinute() + ":" + timer.getDdSecond()) == true){
+                            if (Leaderboard.Check(wall.getLevel(), Wall.getScore(), timer.getDdMinute() + ":" + timer.getDdSecond()) == true){
                                 JFrame popup = new JFrame(); 
     
                                 String userName = (String)JOptionPane.showInputDialog(
-                                    popup, "New Highscore!\n"
+                                    popup, "New Record!\n"
                                     + "Name:",
-                                    "Highscore",
+                                    "New Record",
                                     JOptionPane.PLAIN_MESSAGE
                                 );
+
+                                while (userName.length() > 8){
+
+                                    userName = (String)JOptionPane.showInputDialog(
+                                        popup, 
+                                        "Please enter less than 9 characters\n"
+                                        + "Name:",
+                                        "New Record",
+                                        JOptionPane.PLAIN_MESSAGE
+                                    );
+
+                                }
     
                                 if (userName != null){
     
-                                    Leaderboard.AddPlayer(userName,Wall.getScore(),timer.getDdMinute() + ":" + timer.getDdSecond());
+                                    Leaderboard.AddPlayer(userName,wall.getLevel(), Wall.getScore(),timer.getDdMinute() + ":" + timer.getDdSecond());
     
                                 }
                                 
@@ -137,6 +149,9 @@ public class GameBoard extends JComponent{
                         } catch (IOException | ParseException e1) {
                             e1.printStackTrace();
                         }
+
+                        Wall.setScore(0);
+
                     }
     
                 } 
@@ -151,7 +166,7 @@ public class GameBoard extends JComponent{
                     message = "Game over";
                     if (mode != "training"){
                         try {
-                            if (Leaderboard.Check(Wall.getScore(), timer.getDdMinute() + ":" + timer.getDdSecond()) == true){
+                            if (Leaderboard.Check(wall.getLevel(), Wall.getScore(), timer.getDdMinute() + ":" + timer.getDdSecond()) == true){
 
                                 JFrame popup = new JFrame(); 
         
@@ -161,10 +176,22 @@ public class GameBoard extends JComponent{
                                     "Highscore",
                                     JOptionPane.PLAIN_MESSAGE
                                 );
+
+                                while (userName.length() > 8){
+
+                                    userName = (String)JOptionPane.showInputDialog(
+                                        popup, 
+                                        "Please enter less than 9 characters\n"
+                                        + "Name:",
+                                        "New Record",
+                                        JOptionPane.PLAIN_MESSAGE
+                                    );
+
+                                }
         
                                 if (userName != null){
         
-                                    Leaderboard.AddPlayer(userName,Wall.getScore(),timer.getDdMinute() + ":" + timer.getDdSecond());
+                                    Leaderboard.AddPlayer(userName, wall.getLevel(), Wall.getScore(),timer.getDdMinute() + ":" + timer.getDdSecond());
         
                                 }       
 
@@ -175,6 +202,8 @@ public class GameBoard extends JComponent{
                         } catch (IOException | ParseException e1) {
                             e1.printStackTrace();
                         }
+
+                        Wall.setScore(0);
                     }
                 }
             }
