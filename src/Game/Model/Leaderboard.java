@@ -17,8 +17,8 @@ public class Leaderboard {
     public static ArrayList<JSONObject> PlayerList() throws IOException, ParseException{
 
         FileReader file = new FileReader("src/Game/Model/Leaderboard.json");
-        JSONTokener tokener = new JSONTokener(file);
-        JSONArray list = new JSONArray (tokener);
+        JSONTokener token = new JSONTokener(file);
+        JSONArray list = new JSONArray (token);
 
         ArrayList<JSONObject> ranking = new ArrayList<>();   
 
@@ -30,7 +30,7 @@ public class Leaderboard {
             
         }
 
-        Collections.sort(ranking, new Comparator<JSONObject>() {
+        ranking.sort(new Comparator<JSONObject>() {
             @Override
             public int compare(JSONObject lhs, JSONObject rhs) {
 
@@ -52,22 +52,20 @@ public class Leaderboard {
         String [] currentTimeStr = time.split(":");
         int currentTime = Integer.parseInt(currentTimeStr[0]) * 60 + Integer.parseInt(currentTimeStr[1]);
 
-        for(Object player: playerlist){
+        for(JSONObject player: playerlist){
 
-            JSONObject playerjson = (JSONObject) player;
-
-            String [] previousTimeStr = ((String) playerjson.get("time")).split(":");
+            String [] previousTimeStr = ((String) player.get("time")).split(":");
             int previousTime = Integer.parseInt(previousTimeStr[0]) * 60 + Integer.parseInt(previousTimeStr[1]);
 
-            if (level > Integer.parseInt((String) playerjson.get("level"))) {
+            if (level > Integer.parseInt((String) player.get("level"))) {
 
                 return true;
 
-            } else if (level == Integer.parseInt((String) playerjson.get("level")) && score > Integer.parseInt((String) playerjson.get("score"))){
+            } else if (level == Integer.parseInt((String) player.get("level")) && score > Integer.parseInt((String) player.get("score"))){
 
                 return true;
 
-            } else if (score == Integer.parseInt((String) playerjson.get("score")) && currentTime > previousTime ){
+            } else if (score == Integer.parseInt((String) player.get("score")) && currentTime > previousTime ){
 
                 return true;
 

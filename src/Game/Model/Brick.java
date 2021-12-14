@@ -49,7 +49,7 @@ abstract public class Brick  {
     public Brick(String name, Point pos,Dimension size,Color border,Color inner,int strength){
         broken = false;
         this.name = name;
-        brickShape = makebrickShape(pos,size);
+        brickShape = makeBrickShape(pos,size);
         this.border = border;
         this.inner = inner;
         this.fullStrength = this.strength = strength;
@@ -101,12 +101,12 @@ abstract public class Brick  {
     public void impact(){
         strength--;
         broken = (strength == 0);
-        if (broken == true){
+        if (broken){
             Wall.setScore(Wall.getScore() + 1);
         }
     }
 
-    private Shape makebrickShape(Point pos,Dimension size){
+    private Shape makeBrickShape(Point pos, Dimension size){
         return new Rectangle(pos,size);
     };
 

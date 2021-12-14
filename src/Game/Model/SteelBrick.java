@@ -32,4 +32,8 @@ public class SteelBrick extends Brick {
         }
     }
 
+    public Random getRandom() {
+        return random;
+    }
+
 }
