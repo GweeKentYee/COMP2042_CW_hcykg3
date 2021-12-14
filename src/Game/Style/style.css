@@ -12,7 +12,7 @@
 
 }
 
-#lblScore, #lblName, #lblTime{
+#lblLevel, #lblScore, #lblName, #lblTime{
     -fx-font-size:15px;
     -fx-font-weight: Bold;
 }

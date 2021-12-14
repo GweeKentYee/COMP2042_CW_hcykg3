@@ -21,6 +21,30 @@ public class LeaderboardController {
     private Button btnBack;
 
     @FXML
+    private Label lblLevel;
+
+    @FXML
+    private Label lblLevel_1;
+
+    @FXML
+    private Label lblLevel_2;
+
+    @FXML
+    private Label lblLevel_3;
+
+    @FXML
+    private Label lblLevel_4;
+
+    @FXML
+    private Label lblLevel_5;
+
+    @FXML
+    private Label lblLevel_6;
+
+    @FXML
+    private Label lblLevel_7;
+
+    @FXML
     private Label lblName;
 
     @FXML
@@ -124,6 +148,7 @@ public class LeaderboardController {
         lblTitle.setText("LEADERBOARD");
 
         lblName.setText("Name");
+        lblLevel.setText("Level");
         lblScore.setText("Score");
         lblTime.setText("Time");
         
@@ -134,6 +159,14 @@ public class LeaderboardController {
         lblName_5.setText("5. "+(String) leaderboard.get(4).get("name"));  
         lblName_6.setText("6. "+(String) leaderboard.get(5).get("name"));  
         lblName_7.setText("7. "+(String) leaderboard.get(6).get("name"));
+
+        lblLevel_1.setText((String) leaderboard.get(0).get("level"));
+        lblLevel_2.setText((String) leaderboard.get(1).get("level"));
+        lblLevel_3.setText((String) leaderboard.get(2).get("level"));
+        lblLevel_4.setText((String) leaderboard.get(3).get("level"));
+        lblLevel_5.setText((String) leaderboard.get(4).get("level"));
+        lblLevel_6.setText((String) leaderboard.get(5).get("level"));
+        lblLevel_7.setText((String) leaderboard.get(6).get("level"));
 
         lblScore_1.setText((String) leaderboard.get(0).get("score"));  
         lblScore_2.setText((String) leaderboard.get(1).get("score"));
