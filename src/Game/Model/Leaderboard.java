@@ -34,10 +34,10 @@ public class Leaderboard {
             @Override
             public int compare(JSONObject lhs, JSONObject rhs) {
 
-                String lscore = (String) lhs.get("score");
-                String rscore = (String) rhs.get("score");
+                String llevel = (String) lhs.get("level");
+                String rlevel = (String) rhs.get("level");
                 // Here you could parse string id to integer and then compare.
-                return Integer.compare(Integer.parseInt(rscore), Integer.parseInt(lscore));
+                return Integer.compare(Integer.parseInt(rlevel), Integer.parseInt(llevel));
             }
         });
 
@@ -45,7 +45,7 @@ public class Leaderboard {
 
     }
 
-    public static boolean Check(int score, String time) throws IOException, ParseException {
+    public static boolean Check(int level, int score, String time) throws IOException, ParseException {
 
         ArrayList<JSONObject> playerlist = PlayerList();
 
@@ -58,8 +58,12 @@ public class Leaderboard {
 
             String [] previousTimeStr = ((String) playerjson.get("time")).split(":");
             int previousTime = Integer.parseInt(previousTimeStr[0]) * 60 + Integer.parseInt(previousTimeStr[1]);
-            
-            if (score > Integer.parseInt((String) playerjson.get("score"))){
+
+            if (level > Integer.parseInt((String) playerjson.get("level"))) {
+
+                return true;
+
+            } else if (level == Integer.parseInt((String) playerjson.get("level")) && score > Integer.parseInt((String) playerjson.get("score"))){
 
                 return true;
 
@@ -75,10 +79,11 @@ public class Leaderboard {
 
     }
 
-    public static void AddPlayer(String s, Integer score, String time) throws IOException, ParseException{
+    public static void AddPlayer(String s, Integer level, Integer score, String time) throws IOException, ParseException{
 
         JSONObject newPlayer = new JSONObject();
         newPlayer.put("name",s);
+        newPlayer.put("level", level.toString());
         newPlayer.put("score",score.toString());
         newPlayer.put("time", time);
 
@@ -93,28 +98,40 @@ public class Leaderboard {
 
         int x = 0;
 
-        for (int i = 0; i < 6; i++){
+        for (int i = 0; i < 7; i++){
 
             String [] previousTimeStr = ((String) playerlist.get(i).get("time")).split(":");
             int previousTime = Integer.parseInt(previousTimeStr[0]) * 60 + Integer.parseInt(previousTimeStr[1]);
 
-            if (!execute && (Integer.parseInt((String) newPlayer.get("score")) > Integer.parseInt((String) playerlist.get(i).get("score")))){
+
+            if (!execute && level > Integer.parseInt((String) playerlist.get(i).get("level"))){
 
                 newLeaderBaord.put(i, newPlayer);
                 execute = true;
                 i++;
-                if (i >= 6 ){
+                if (i >= 7 ){
+                    break;
+                }
+                newLeaderBaord.put(i, playerlist.get(x));
+                x++;
+
+            } else if(!execute && level == Integer.parseInt((String) playerlist.get(i).get("level")) && Integer.parseInt((String) newPlayer.get("score")) > Integer.parseInt((String) playerlist.get(i).get("score"))){
+
+                newLeaderBaord.put(i, newPlayer);
+                execute = true;
+                i++;
+                if (i >= 7 ){
                     break;
                 }
                 newLeaderBaord.put(i, playerlist.get(x));
                 x++;
                 
-            } else if (!execute && (Integer.parseInt((String) newPlayer.get("score")) == Integer.parseInt((String) playerlist.get(i).get("score"))) && currentTime > previousTime){
+            } else if (!execute && level == Integer.parseInt((String) playerlist.get(i).get("level")) && Integer.parseInt((String) newPlayer.get("score")) == Integer.parseInt((String) playerlist.get(i).get("score")) && currentTime > previousTime){
 
                 newLeaderBaord.put(i, newPlayer);
                 execute = true;
                 i++;
-                if (i >= 6 ){
+                if (i >= 7 ){
                     break;
                 }
                 newLeaderBaord.put(i, playerlist.get(x));
