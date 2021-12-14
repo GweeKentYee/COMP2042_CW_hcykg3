@@ -58,7 +58,7 @@ public class GameInfoFrame extends JFrame {
         this.add(jfxPanel, BorderLayout.CENTER);
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(GameFrame.class.getResource("GameInfo.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(GameInfoFrame.class.getResource("GameInfo.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
 

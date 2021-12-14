@@ -41,8 +41,6 @@ public class GameFrame extends JFrame{
 
         super();
 
-        leaderboardFrame = new LeaderboardFrame(this);
-
         gameInfoFrame = new GameInfoFrame(this);
 
         gaming = false;
@@ -85,6 +83,7 @@ public class GameFrame extends JFrame{
 
     public void enableLeaderBoard(){
         this.dispose();
+        leaderboardFrame = new LeaderboardFrame(this);
         leaderboardFrame.initialize();
 
     }
