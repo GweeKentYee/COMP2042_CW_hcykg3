@@ -14,7 +14,7 @@ This project is about refactoring an existing game called Brick Destroy created 
 * Before actually running the project, we will have to add some libraries (JavaFX and org.json) in order to run this project. 
 * After adding the libraries, we will have to add a VM option into the configuration.     
 Eg. (--module-path /Users/Sample/Sample/javafx-sdk-17.0.1/lib --add-modules=javafx.controls,javafx.fxml,javafx.swing)
-* Now you are good to go!
+* Now you can run the GraphicsMain.java file as it is the main file
 	
 ## Functions
 
