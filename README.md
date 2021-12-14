@@ -4,10 +4,22 @@
 This project is about refactoring an existing game called Brick Destroy created by FilippoRanza.
 
 ## Table of Contents
+* [Refactoring and Addition](#refactoring-and-addition)
 * [How to Install and Run](#how-to-install-and-run)
 * [Functions](#functions)
 * [How to Play](#how-to-play)
 * [Acknowledgment](#acknowledgement)
+
+## Refactoring and Addition
+* MVC Format
+* Factory Design Pattern
+* Renaming Variables and Methods
+* Splitting Components
+* JavaFX Implementation
+* JSON Data Handling
+* New Game Modes
+* Leaderboard
+* Game Info
 
 ## How to Install and Run
 * Create a Java project in your IDE and then paste the source files into your project.
