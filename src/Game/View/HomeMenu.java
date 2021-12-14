@@ -18,12 +18,16 @@
 package Game.View;
 
 import javax.swing.*;
+import javax.imageio.ImageIO;
 
 import Game.Controller.HomeMenuController;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 public class HomeMenu extends JComponent {
@@ -37,10 +41,10 @@ public class HomeMenu extends JComponent {
     private static final String INFO_TEXT = "Info";
     private static final String EXIT_TEXT = "Exit";
 
-    private static final Color BG_COLOR = Color.CYAN.darker();
-    private static final Color TEXT_COLOR = new Color(16, 52, 166);//egyptian blue
-    private static final Color CLICKED_BUTTON_COLOR = BG_COLOR.brighter();
-    private static final Color CLICKED_TEXT = Color.WHITE;
+    private static final Color BG_COLOR = Color.GRAY;
+    private static final Color TEXT_COLOR = new Color(102, 0, 0);
+    private static final Color CLICKED_BUTTON_COLOR = Color.CYAN.darker();
+    private static final Color CLICKED_TEXT = Color.CYAN.darker();
 
     private Rectangle menuFace;
     private Rectangle trainingButton;
@@ -61,6 +65,8 @@ public class HomeMenu extends JComponent {
     private boolean infoClicked;
     private boolean exitClicked;
     private boolean leaderboardClicked;
+
+    BufferedImage BackgroundImage;
 
     private HomeMenuController homeMenuController;
 
@@ -91,7 +97,7 @@ public class HomeMenu extends JComponent {
         greetingsFont = new Font("Noto Mono",Font.PLAIN,25);
         gameTitleFont = new Font("Noto Mono",Font.BOLD,40);
         creditsFont = new Font("Monospaced",Font.PLAIN,10);
-        buttonFont = new Font("Monospaced",Font.PLAIN,trainingButton.height-8);
+        buttonFont = new Font("SansSerif",Font.PLAIN,trainingButton.height-8);
 
     }
 
@@ -129,18 +135,28 @@ public class HomeMenu extends JComponent {
     }
 
     private void drawContainer(Graphics2D g2d){
-        Color prev = g2d.getColor();
+        try {
 
-        g2d.setColor(BG_COLOR);
-        g2d.fill(menuFace);
+            BackgroundImage = ImageIO.read(new File("src/Game/Style/Bricks.jpg"));
+            g2d.drawImage(BackgroundImage,0,0,450,450,null);
 
-        Stroke tmp = g2d.getStroke();
+        } catch (IOException e){
 
-        g2d.draw(menuFace);
+            Color prev = g2d.getColor();
 
-        g2d.setStroke(tmp);
+            g2d.setColor(BG_COLOR);
+            g2d.fill(menuFace);
 
-        g2d.setColor(prev);
+            Stroke tmp = g2d.getStroke();
+
+            g2d.draw(menuFace);
+
+            g2d.setStroke(tmp);
+
+            g2d.setColor(prev);
+
+        }
+        
     }
 
     private void drawText(Graphics2D g2d){
